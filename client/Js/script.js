@@ -23,7 +23,7 @@ function PrintPatientsList() {
   }
   
   function loadJSONData(data) {
-    const personInfo = document.getElementById("result");
+    const personInfo = document.getElementById("patient");
     personInfo.innerHTML = ''; 
   
     const ul = document.createElement("ul");
@@ -55,8 +55,8 @@ function PrintPatientsList() {
   
     personInfo.appendChild(ul);
     
-  if (!window.sessionStorage.getItem("result")) {
-    window.sessionStorage.setItem("result", JSON.stringify(data.patients));
+  if (!window.sessionStorage.getItem("patient")) {
+    window.sessionStorage.setItem("patient", JSON.stringify(data.patients));
   }
   }
 
@@ -296,5 +296,4 @@ function PrintPatientsList() {
       activityInfo.appendChild(noActivity);
     }
   }
- 
-  
+
