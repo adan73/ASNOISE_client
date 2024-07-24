@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     window.sessionStorage.setItem('userName', username);
                     if (data.user_type === 'doctor') {
-                        window.location.href = 'index.html';
+                        window.location.href = 'Doctor_homepage.html';
                     } else {
                         window.location.href = 'patientside.html';
                     }
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     window.sessionStorage.setItem('userName', username);
                     if(user_type === 'doctor')
-                    window.location.href = 'index.html';
+                    window.location.href = 'Doctor_homepage.html';
                     else{
                         window.location.href = 'patienside.html';  
                     }

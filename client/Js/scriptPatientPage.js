@@ -3,6 +3,13 @@ window.onload = () => {
   initializePage();
   const removeBtn = document.getElementById("trash-icon");
   removeBtn.onclick = removePatient;
+  const userName = window.sessionStorage.getItem('userName');
+    
+  const userNameElement = document.getElementById('user-name');
+  if (userNameElement) {
+      userNameElement.textContent = userName ? userName : 'Guest'; 
+  }
+
 };
 
 async function initializePage() {
@@ -214,5 +221,5 @@ function removePatient() {
   window.sessionStorage.setItem("patients", JSON.stringify(filtered));
   window.sessionStorage.removeItem("patientData");
 
-  window.location.href = "index.html";
+  window.location.href = ".Doctor_homepage.html";
 }

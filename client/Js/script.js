@@ -8,6 +8,9 @@ window.onload = () => {
 
     PrintPatientsList();
     BuildCalendar();
+    build_the_progress();
+    print_x();
+    print_patient_age_for_digram();
 };
 
 function PrintPatientsList() {
