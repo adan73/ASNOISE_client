@@ -4,14 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVNOISE|Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/style.css">
+    <script src="Js/patientHomePage.js" type="text/javascript"></script>
 </head>
 <body>
     <header>
+        <a href="#" id="logo"></a>
+        <div class="profile">
+            <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
+            <div class="profile-pic-wrapper">
+                <img src="images/user_first_profile.jpg" alt="profile picture" class="profile-pic" />
+                <span class="status-dot"></span>
+            </div>
+        </div>
     </header>
-    <main>
+    <main class="main-wrapper">
+        <section class="activitylist">
+            <section>
+                <div class="patient-cal">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                          <span class="month-year"></span>
+                          <span class="prev">&#10094;</span>
+                          <span class="next">&#10095;</span>
+                        </div>
+                        <div class="calendar-body">
+                          <div class="calendar-weekdays" id="weekday-header"></div>
+                          <div class="calendar-dates" id="calendar-dates"></div>
+                        </div>
+                    </div>
+                    <div class="activity_container">
+                        <i class="fa-solid fa-pen"></i>
+                        <div id="activity">
+                          <div id="active_tex1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="doc-detail">
+                    <h3>My Doctor</h3>
+                    <div class="Doc-info">
+                        <img src="images/logo_icon_photo.png" alt="doctor's picture">
+                        <div class="dr-info">
+                            <p><b>Dr. Jane Doe </b>is a distinguished ADHD specialist with a decade of experience in diagnosing and treating Attention Deficit Hyperactivity Disorder.</p>
+                            <div class="contact-icons">
+                                <i class='fas fa-at'></i>
+                                <i class='far fa-comment-dots'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="">
+                <div class="treatment-container">
+                    <h2>Treatment Information</h2>
+                    <div class="tratmentMethod">
+                        <h3>Methods Of Treatment</h3>
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+                <div class="notification_container">
+                    <h3>______ Notification ______</h3>
+                    <div class="notification_bar">
+                        <div><p>no new notification</p></div>
+                    </div>
+                </div>
+            </section>
+        </section>
     </main>
     <footer>
+        <i class="fa-solid fa-circle-question fa-xl"></i>
+        <i class="fa-solid fa-gear fa-xl"></i>
     </footer>
 </body>
 </html>

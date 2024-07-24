@@ -47,7 +47,7 @@
   }
   
   #logo{
-    background-image: url("../images/logo\ photo.png");
+    background-image: url("../images/logo_photo.png");
     background-repeat: no-repeat;
     background-size: contain;
     width: 275.17px;
@@ -517,7 +517,7 @@
   }
   
   .date-cell.selected-date {
-    background-color: blue; /* Color for the selected date */
+    background-color: rgb(6, 155, 98); /* Color for the selected date */
     color: white;
   }
   
@@ -1356,4 +1356,131 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+.main-wrapper {
+  display: flex;
+  flex-direction: column;  
+}
+.activitylist {
+  display: flex;
+  flex-direction: row;   
+  gap: 10%; 
+  flex-wrap: wrap;
+  height: 660px;
+}
+.patient-cal {
+  margin-top: 15px;
+  margin-left: 15px;
+}
+.treatment-container {
+  margin-top: 30px;
+  background-color: white;
+  color: #959595;
+  border: 1px solid #cbcbcb;
+  box-shadow: rgba(117, 153, 154, 0.25) 0px 10px 20px,
+    rgba(68, 113, 119, 0.3) 0px 6px 6px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  width: 510px;
+  height: 400px;
+}
+.treatment-container h2{
+  margin: 10px;
+  color:#0f695a;
+}
+.treatment-container h3 {
+  color:#3BA295;
+  margin-left: 20px;
+}
+.treatment-container ul {
+  list-style-type: square;
+  color: #6a6b6b;
+  margin-left: 40px;
+  margin-top: 5px;
+}
+.treatment-container li {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.treatment-container li:hover {
+color: #000;
+font-size: 20px;
+}
+.activity_container i:hover {
+  color:#04342c;
+  cursor: pointer;
+}
+.doc-detail {
+  display: flex;
+  flex-direction: column;  
+  margin-left: 60px;
+  margin-top: 75px;
+}
+.doc-detail h3 {
+  margin-top: 20px;
+  color: #004d40;
+  font-size: 20px;
+}
+.Doc-info {
+  margin-top: 20px;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: row;   
+  gap: 10px;
+}
+.Doc-info img {
+  border-radius: 50%;
+  border: 2px solid #0c5041;
+  width: 130px;
+  height: 130px;
+}
+.Doc-info p {
+  margin-top: 20px;
+  margin-left: 5px;
+  width: 380px;
+}
+.dr-info{
+  display: flex;
+  flex-direction: column;   
+}
+.contact-icons i {
+  font-size: 26px;
+}
+.contact-icons i:hover{
+  color:#23917f;
+  cursor: pointer;
+}
+.contact-icons {
+  display: flex;
+  flex-direction: row; 
+  margin-top: 5px;
+  gap: 13px;
+}
+.notification_container {
+  margin-top: 20px;
+  align-items: center;
+  width: 510px;
+  display: flex;
+  flex-direction: column;   
+  gap: 5px;
+}
+.notification_container h3 {
+  color: #878888;
+}
+.notification_bar {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;   
+  gap:10px;
+}
+.notification_bar div{
+  background-color: #dff1f0;
+  width: 450px;
+  height: 50px;
+  border-radius: 75px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b4d4d;
 }
