@@ -511,18 +511,29 @@
   .date-cell:hover {
     background-color: #e0e0e0;
   }
+  .date-cell.current-date {
+    background-color: #296A5F; /* Color for the current date */
+    color: white;
+  }
   
+  .date-cell.selected-date {
+    background-color: blue; /* Color for the selected date */
+    color: white;
+  }
+  
+
   .activity_container {
     width: 370px;
     height: 107px;
     border: 0px;
     background-color: #dff1f0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     top: 33px;
     left: 120px;
     margin-bottom: 43px;
-  
+    padding: 5px;
+    overflow-y: auto;
     position: relative;
   }
   
@@ -531,6 +542,7 @@
     width: 20px;
     height: 20px;
     top: 6px;
+  
     left: 340px;
     position: absolute;
   }
@@ -538,27 +550,32 @@
   #activity {
     display: flex;
     flex-direction: column;
-    width: 100%;
     left: 14px;
     top: 15px;
     bottom: 15px;
-    padding: 0;
+    padding: 8px;
     margin: 0;
-    position: relative;
   }
   
   .time_text {
-    width: 90px;
+    min-width: 90px; 
     background-color: white;
-    justify-content: center;
     box-shadow: -1px 4px 7px hsla(176, 100%, 20%, 0.25);
     align-items: center;
     font-size: 14px;
     color: #000;
     margin-right: 18px;
     padding-left: 5px;
+    text-align: center;
+    display: inline-block;
   }
-  
+  .no_activity_text{
+    left:90px;
+    position: relative;
+    top:45px;
+    font-weight: bold;
+    color: #004D40;
+  }
   .active_text {
     max-width: 240px;
     background-color: white;
@@ -568,6 +585,20 @@
     border-left: 2px solid rgb(0, 0, 0);
     box-shadow: -1px 4px 7px hsla(176, 100%, 20%, 0.25);
     font-size: 14px;
+  }
+  
+  #active_text1 {
+    max-width: calc(100% - 100px);
+
+    max-width: 240px;
+    background-color: white;
+    padding: 1px;
+    padding-left: 3px;
+    padding-right: 8px;
+    border-left: 2px solid rgb(0, 0, 0);
+    box-shadow: -1px 4px 7px hsla(176, 100%, 20%, 0.25);
+    font-size: 14px;
+    overflow: hidden; 
   }
   
   #activity ul {
