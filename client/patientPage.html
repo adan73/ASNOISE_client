@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVNOISE Patient Information</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+    <script src="Js/scriptPatientPage.js"></script>
+</head>
+
+<body>
+	<header>
+		<a href="index.html" id="logo"></a>
+		<div class="profile">
+			<div class="profile-text">Hi,Orit</div>
+			<div class="profile-pic-wrapper">
+				<img src="images/profail pic.png" alt="Orit profile picture" class="profile-pic" />
+				<span class="status-dot"></span>
+			</div>
+		</div>
+	</header>
+    <div class="wrapper">
+        <main>
+            <section class="information">
+                <div class="patient-info">
+                    <div class="patient-details">
+                        <img src="" alt="" id="profile-picture">
+                        <div class="ayaInfo">
+                            <div class="edit-patient">
+                                <h2 id="name"></h2>
+                                <a href="patientForm.html">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <i id="trash-icon" class='fas fa-trash-alt' ></i>
+                            </div>
+                            <p>Age: <span id="age"></span></p>
+                            <p>ADHD Stage: <span id="adhd-stage"></span></p>
+                        </div>
+                        <button id="contact-patient">Contact Patient</button>
+                    </div>
+                    <div class="personal-info">
+                        <h3>Personal information</h3>
+                        <div class="info-line">
+                            <p>ID: <span id="id"></span></p>
+                            <p>HMO: <span id="hmo"></span></p>
+                        </div>
+                        <p>Email: <span id="email"></span></p>
+                        <p>Phone: <span id="phone"></span></p>
+                        <p>Student Address: <span id="address"></span></p>
+                    </div>
+                </div>
+                <div class="treatment-info">
+                    <h2>Treatment Information</h2>
+                    <div id="editIcon"><i class="material-icons">edit</i></div>
+                    <div class="methods">
+                        <h3>Methods Of Treatment</h3>
+                        <ul>
+                        </ul>
+                    </div>
+                    <div class="improvement">
+                        <span>Improvement</span>
+                        <canvas id="chartId" aria-label="chart" height="114.34px" width="114.34px"></canvas>
+                    </div>
+            </section>
+            <section class="Dailyactivity">
+                <h2>Daily Activity</h2>
+                <div class="patient-calendar-container">
+                    <div class="calendar-header">
+                        <span class="month-year"></span>
+                        <span class="prev">&#10094;</span>
+                        <span class="next">&#10095;</span>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-weekdays" id="weekday-header"></div>
+                        <div class="calendar-dates" id="calendar-dates"></div>
+                    </div>
+                </div>
+                <div class="schedule">    
+                    <div class="schedule-table-container">
+                        <table id="timetable" class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>       
+                    </div>       
+                </div>
+                <div class="activity-Icons">
+                    <i class="material-icons">graphic_eq</i>
+                    <i class="material-icons">location_on</i>
+                    <img src="images/calender_icon_green.png" alt="calender icon">
+                    <img src="images/self_improvement_icon.png" alt="meditation icon" id="meditationIcon">
+                    <img src="images/walking_icon_default.png" alt="walking icon" id="WalkingIcon">
+                    <i class='far fa-file-alt'></i>
+                </div>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <i class="fa-solid fa-circle-question fa-xl"></i>
+        <i class="fa-solid fa-gear fa-xl"></i>
+    </footer>
+</body>
+
+</html>
