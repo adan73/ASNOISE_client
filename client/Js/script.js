@@ -1,18 +1,11 @@
 window.onload = () => {
-    const userName = window.sessionStorage.getItem('userName');
-    
-    const userNameElement = document.getElementById('user-name');
-    if (userNameElement) {
-        userNameElement.textContent = userName ? userName : 'Guest'; 
-    }
-
+    printprofailpic();
     PrintPatientsList();
     BuildCalendar();
     build_the_progress();
     print_x();
     print_patient_age_for_digram();
 };
-
 function PrintPatientsList() {
     fetch("https://asnoise-4.onrender.com/api/patients/Allpatients")
       .then((response) => response.json())
@@ -241,7 +234,8 @@ function PrintPatientsList() {
       }
       PrintTheDaysInMonthCalendar(currentYear, currentMonth);
     }
-}async function Show_User_Activity(selectedDate) {
+}
+async function Show_User_Activity(selectedDate) {
   try {
     const date = selectedDate;
     const username = window.sessionStorage.getItem('userName');
@@ -261,7 +255,8 @@ function PrintPatientsList() {
 
     if (data.error) {
       const noActivity = document.createElement('p');
-      noActivity.textContent = `Error fetching activities: ${data.error}`;
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
       activityInfo.appendChild(noActivity);
     } else if (data.length === 0) {
       const noActivity = document.createElement('p');
@@ -289,5 +284,45 @@ function PrintPatientsList() {
     const noActivity = document.createElement('p');
     noActivity.textContent = `Error fetching activities: ${error.message}`;
     activityInfo.appendChild(noActivity);
+  }
+}
+
+async function printprofailpic() {
+  const username = window.sessionStorage.getItem('userName');
+  try {
+    const response = await fetch('https://asnoise-4.onrender.com/api/users/getUserFirstNameAndPhotoAndId', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username})
+    });
+
+    const data = await response.json();
+    const profilePicDiv = document.getElementById('profile_img');
+    if (data.success && data.photo) {
+      const imgElement = document.createElement('img');
+      imgElement.classList.add('profile-pic')
+      imgElement.src = data.photo; 
+      imgElement.alt = "Profile Picture";
+      profilePicDiv.innerHTML = '';
+      profilePicDiv.appendChild(imgElement);
+      const userName =  data.first_name;
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement) {
+       userNameElement.textContent = userName ? userName : 'Guest'; 
+      }
+    } else {
+      const imgElement1 = document.createElement('img');
+      imgElement1.classList.add('profile-pic')
+      imgElement1.src = './images/user_first_profile.jpg';
+      imgElement1.alt = "Profile Picture";
+      profilePicDiv.appendChild(imgElement1);
+      const userNameElement = document.getElementById('user-name');
+       userNameElement.textContent = 'Guest'; 
+    }
+  } catch (error) {
+    console.error('Error fetching profile picture:', error);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }

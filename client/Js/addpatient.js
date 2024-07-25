@@ -1,10 +1,5 @@
 window.onload = () => {
-    const userName = window.sessionStorage.getItem('userName');
-    
-    const userNameElement = document.getElementById('user-name');
-    if (userNameElement) {
-        userNameElement.textContent = userName ? userName : 'Guest'; 
-    }
+    printprofailpic();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -57,3 +52,45 @@ document.addEventListener('DOMContentLoaded', () => {
       
     });
 });
+
+
+async function printprofailpic() {
+    const username = window.sessionStorage.getItem('userName');
+    try {
+      const response = await fetch('https://asnoise-4.onrender.com/api/users/getUserFirstNameAndPhotoAndId', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username})
+      });
+  
+      const data = await response.json();
+      const profilePicDiv = document.getElementById('profile_img');
+      if (data.success && data.photo) {
+        const imgElement = document.createElement('img');
+        imgElement.classList.add('profile-pic')
+        imgElement.src = data.photo; 
+        imgElement.alt = "Profile Picture";
+        profilePicDiv.innerHTML = '';
+        profilePicDiv.appendChild(imgElement);
+        const userName =  data.first_name;
+        const userNameElement = document.getElementById('user-name');
+        if (userNameElement) {
+         userNameElement.textContent = userName ? userName : 'Guest'; 
+        }
+      } else {
+        const imgElement1 = document.createElement('img');
+        imgElement1.classList.add('profile-pic')
+        imgElement1.src = './images/user_first_profile.jpg';
+        imgElement1.alt = "Profile Picture";
+        profilePicDiv.appendChild(imgElement1);
+        const userNameElement = document.getElementById('user-name');
+         userNameElement.textContent = 'Guest'; 
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+      document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+    }
+  }
+  

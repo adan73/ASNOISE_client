@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.user_type === 'doctor') {
                         window.location.href = 'Doctor_homepage.html';
                     } else {
-                        window.location.href = 'patientside.html';
+                        window.location.href = 'Doctor_homepage.html';
                     }
                 } else {
                     alert(data.error || 'Login failed');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value;
             const user_password = document.getElementById('password').value;
             const email = document.getElementById('email').value;
-            const profile_image = 'user_first_profile.jpg';
+            const photo = 'user_first_profile.jpg';
             const user_type = document.getElementById('user_type').value;
 
             // Validate input
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ users_id, first_name, last_name, user_password, email, profile_image, username, user_type })
+                    body: JSON.stringify({ users_id, first_name, last_name, user_password, email, photo, username, user_type })
                 });
 
                 if (!response.ok) {
