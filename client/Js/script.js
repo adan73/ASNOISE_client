@@ -316,9 +316,11 @@ async function printprofailpic() {
       imgElement.classList.add('profile-pic')
       imgElement.src = data.photo; 
       imgElement.alt = "Profile Picture";
+      window.sessionStorage.setItem('doctorPhoto', data.photo);
       profilePicDiv.innerHTML = '';
       profilePicDiv.appendChild(imgElement);
       const userName =  data.first_name;
+      window.sessionStorage.setItem('doctorFirstName', data.first_name);
       const userNameElement = document.getElementById('user-name');
       if (userNameElement) {
        userNameElement.textContent = userName ? userName : 'Guest'; 
