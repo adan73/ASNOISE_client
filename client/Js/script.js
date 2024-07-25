@@ -241,59 +241,53 @@ function PrintPatientsList() {
       }
       PrintTheDaysInMonthCalendar(currentYear, currentMonth);
     }
-}
+}async function Show_User_Activity(selectedDate) {
+  try {
+    const date = selectedDate;
+    const username = window.sessionStorage.getItem('userName');
+    const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, date })
+    });
 
-  async function Show_User_Activity(selectedDate) {
-    try {
-      const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({selectedDate })
-      });
-  
-      const data = await response.json();
-  
-      const activityInfo = document.getElementById('activity');
-      const ul = document.createElement('ul');
-      activityInfo.innerHTML = ""; // Clear previous activities
-  
-      if (data.error) {
-        const noActivity = document.createElement('p');
-        noActivity.textContent = 'Error fetching activities.';
-        activityInfo.appendChild(noActivity);
-      } else if (data.length === 0) {
-        // Handle the case where there are no activities for the selected date
-        const noActivity = document.createElement('p');
-        noActivity.classList.add("no_activity_text")
-        noActivity.textContent = 'No activity for this day.';
-        activityInfo.appendChild(noActivity);
-      } else {
-        // Display the activities
-        data.forEach(activity => {
-          const li = document.createElement('li');
-    
-          const activitytime = document.createElement('div');
-          activitytime.textContent = activity.time;
-          activitytime.classList.add('time_text');
-          
-          const theActivity = document.createElement('div');
-          theActivity.textContent = activity.the_activity;
-          theActivity.classList.add('active_text');
-    
-          li.appendChild(activitytime);
-          li.appendChild(theActivity);
-          ul.appendChild(li);
-        });
-        activityInfo.appendChild(ul);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      const activityInfo = document.getElementById('activity');
+    const data = await response.json();
+
+    const activityInfo = document.getElementById('activity');
+    const ul = document.createElement('ul');
+    activityInfo.innerHTML = ""; 
+
+    if (data.error) {
       const noActivity = document.createElement('p');
-      noActivity.textContent = 'Error fetching activities.';
+      noActivity.textContent = `Error fetching activities: ${data.error}`;
       activityInfo.appendChild(noActivity);
+    } else if (data.length === 0) {
+      const noActivity = document.createElement('p');
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
+      activityInfo.appendChild(noActivity);
+    } else {
+      data.forEach(activity => {
+        const li = document.createElement('li');
+        const activitytime = document.createElement('div');
+        activitytime.textContent = activity.time;
+        activitytime.classList.add('time_text');
+        const theActivity = document.createElement('div');
+        theActivity.textContent = activity.the_activity;
+        theActivity.classList.add('active_text');
+        li.appendChild(activitytime);
+        li.appendChild(theActivity);
+        ul.appendChild(li);
+      });
+      activityInfo.appendChild(ul);
     }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('activity');
+    const noActivity = document.createElement('p');
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
+    activityInfo.appendChild(noActivity);
   }
-
+}
