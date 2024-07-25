@@ -1,10 +1,18 @@
+window.onload = () => {
+    const userName = window.sessionStorage.getItem('userName');
+    
+    const userNameElement = document.getElementById('user-name');
+    if (userNameElement) {
+        userNameElement.textContent = userName ? userName : 'Guest'; 
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('form');
 
     form.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
 
-        // Retrieve values from the form fields
         const first_name = document.getElementById("fname").value;
         const last_name = document.getElementById("lname").value;
         const patient_id = document.getElementById("id").value;
@@ -17,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const address = document.getElementById("Address").value;
         const photo = 'https://cdn-icons-png.freepik.com/512/3686/3686930.png';
 
-        
         if (!first_name || !last_name || !patient_id || !hmo || !adhdStage || !age || !phone || !email || !career || !address) {
             alert("Please fill out all required fields.");
             return; 
@@ -35,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const errorText = await response.text();
               throw new Error(`Network response was not ok: ${errorText}`);
           }
-      
+    
           const data = await response.json();
       
           if (data.success) {
