@@ -1,40 +1,47 @@
 window.onload = () => {
     const messageDataUrl = ''; // URL to JSON file (data)
-    let lastMessageId = 0; 
+    let lastMessageId = 0;
     const currentUser = 'patient'; // Change this based on user 
 
     const textarea = document.querySelector('.chat-footer textarea');
-    textarea.value = ''; 
+    textarea.value = '';
     textarea.placeholder = 'Ask me Anything......';
 
-    loadMessages(messageDataUrl, lastMessageId, currentUser);
+    loadMessages(lastMessageId, currentUser);
     setupSendButton(currentUser);
     startMessagePolling(messageDataUrl, lastMessageId, currentUser);
 };
 
 
-function loadMessages(messageDataUrl, lastMessageId, currentUser) {
-    fetch(messageDataUrl)
-        .then(response => response.json())
-        .then(data => {
-            const chatBody = document.querySelector('.chat-body');
-            chatBody.innerHTML = ''; 
-
-            if (data.messages.length === 0) {
-                const noMessagesElement = document.createElement('p');
-                noMessagesElement.textContent = 'You have no messages yet';
-                noMessagesElement.style.textAlign = 'center'; 
-                noMessagesElement.style.color = '#fff'; 
-                chatBody.appendChild(noMessagesElement);
-            } else {
-                data.messages.forEach(message => {
-                    appendMessage(chatBody, message, currentUser);
-                    lastMessageId = Math.max(lastMessageId, message.id); 
-                });
-            }
-            chatBody.scrollTop = chatBody.scrollHeight; 
-        })
-        .catch(error => console.error('Error loading messages:', error));
+async function loadMessages(lastMessageId, currentUser) {
+    try {
+        const response = await fetch('test.json');
+        const data = await response.json();
+        const chatBody = document.querySelector('.chat-body');
+        chatBody.innerHTML = '';
+        if (data.messages.length === 0) {
+            const noMessagesElement = document.createElement('p');
+            noMessagesElement.textContent = 'You have no messages yet';
+            noMessagesElement.style.textAlign = 'center';
+            noMessagesElement.style.color = '#fff';
+            chatBody.appendChild(noMessagesElement);
+        } else {
+            data.messages.forEach(message => {
+                appendMessage(chatBody, message, currentUser);
+                lastMessageId = Math.max(lastMessageId, message.id);
+            });
+        }
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        const chatBody = document.querySelector('.chat-body');
+        const noChat = document.createElement('p');
+        noChat.textContent = 'Error fetching chat history.';
+        noChat.style.color = '#fff';
+        noChat.style.textAlign = 'center';
+        chatBody.appendChild(noChat);
+    }
 }
 
 function appendMessage(chatBody, message, currentUser) {
@@ -68,7 +75,7 @@ function setupSendButton(currentUser) {
         const messageText = textarea.value.trim();
         if (messageText) {
             sendMessage(messageText, currentUser);
-            textarea.value = ''; 
+            textarea.value = '';
             textarea.placeholder = 'Ask me Anything......';
         }
     });
@@ -88,7 +95,7 @@ function sendMessage(text, currentUser) {
 
     const chatBody = document.querySelector('.chat-body');
     appendMessage(chatBody, { sender: currentUser, text: text }, currentUser);
-    chatBody.scrollTop = chatBody.scrollHeight; 
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
 
 function startMessagePolling(messageDataUrl, lastMessageId, currentUser) {
@@ -104,9 +111,9 @@ function startMessagePolling(messageDataUrl, lastMessageId, currentUser) {
                         appendMessage(chatBody, message, currentUser);
                         lastMessageId = Math.max(lastMessageId, message.id);
                     });
-                    chatBody.scrollTop = chatBody.scrollHeight; 
+                    chatBody.scrollTop = chatBody.scrollHeight;
                 }
             })
             .catch(error => console.error('Error polling messages:', error));
-    }, 5000); 
+    }, 5000);
 }
