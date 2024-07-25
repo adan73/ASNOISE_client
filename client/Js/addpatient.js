@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const career = document.getElementById("Career").value;
         const address = document.getElementById("Address").value;
         const photo = 'https://cdn-icons-png.freepik.com/512/3686/3686930.png';
+        const doctor =window.sessionStorage.getItem('doctorFirstName');
+        const doctor_photo = window.sessionStorage.getItem('doctorPhoto');
 
         if (!first_name || !last_name || !patient_id || !hmo || !adhdStage || !age || !phone || !email || !career || !address) {
             alert("Please fill out all required fields.");
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
               headers: {
                   'Content-Type': 'application/json'
               },
-              body: JSON.stringify({first_name,last_name,patient_id,hmo,adhdStage, age, career,address, phone, email, photo})
+              body: JSON.stringify({first_name,last_name,patient_id,hmo,adhdStage, age, career,address, phone, email, photo ,doctor,doctor_photo })
           });
       
           if (!response.ok) {
@@ -72,10 +74,12 @@ async function printprofailpic() {
         imgElement.classList.add('profile-pic')
         imgElement.src = data.photo; 
         imgElement.alt = "Profile Picture";
+        window.sessionStorage.setItem('doctorPhoto', data.photo);
         profilePicDiv.innerHTML = '';
         profilePicDiv.appendChild(imgElement);
         const userName =  data.first_name;
         const userNameElement = document.getElementById('user-name');
+        window.sessionStorage.setItem('doctorFirstName', data.first_name);
         if (userNameElement) {
          userNameElement.textContent = userName ? userName : 'Guest'; 
         }

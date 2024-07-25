@@ -6,13 +6,24 @@ window.onload = () => {
     print_x();
     print_patient_age_for_digram();
 };
-function PrintPatientsList() {
-    fetch("https://asnoise-4.onrender.com/api/patients/Allpatients")
-      .then((response) => response.json())
-      .then((data) => {
-        loadJSONData(data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+async function PrintPatientsList() {
+  
+  const username =window.sessionStorage.getItem('doctorFirstName');
+  const photo = window.sessionStorage.getItem('doctorPhoto');
+  try {
+    const response = await fetch('https://asnoise-4.onrender.com/api/patients/getDoctorPatients', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({username , photo})
+    });
+    const data = await response.json();
+    loadJSONData(data);
+    } catch (error) {
+    console.error('Error fetching profile picture:', error);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+    }
   }
   
   function loadJSONData(data) {
