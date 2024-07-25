@@ -42,11 +42,11 @@ function initializeInfo(p) {
   window.sessionStorage.setItem("patientData", JSON.stringify(patient));
   document.getElementById("profile-picture").src = patient.photo;
   document.getElementById("profile-picture").alt = patient.name;
-  document.getElementById("name").textContent = patient.name;
+  document.getElementById("name").textContent =`${patient.first_name} ${patient.last_name}`; 
   document.getElementById("age").textContent = patient.age;
   document.getElementById("adhd-stage").textContent = patient.adhdStage;
 
-  document.getElementById("id").textContent = patient.id;
+  document.getElementById("id").textContent = patient.patient_id;
   document.getElementById("hmo").textContent = patient.hmo;
   document.getElementById("email").textContent = patient.email;
   document.getElementById("phone").textContent = patient.phone;
