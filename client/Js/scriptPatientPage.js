@@ -3,7 +3,6 @@ window.onload = () => {
   initializePage();
   const removeBtn = document.getElementById("trash-icon");
   removeBtn.onclick = removePatient;
-
   printprofailpic();
 };
 
@@ -46,6 +45,9 @@ function initializeInfo(p) {
   document.getElementById("email").textContent = patient.email;
   document.getElementById("phone").textContent = patient.phone;
   document.getElementById("address").textContent = patient.address;
+
+  window.sessionStorage.setItem('patientId', patient.patient_id);
+
 
   const treatmentMethods = document.querySelector(".methods ul");
   patient.treatment?.methods?.forEach((method) => {
@@ -209,14 +211,35 @@ function BuildCalendar() {
   }
 }
 
-function removePatient() {
-  const patients = JSON.parse(window.sessionStorage.getItem("patients"));
-  const filtered = patients.filter((p) => p.id !== patient.id);
+async function removePatient() {
+  const patient_id = window.sessionStorage.getItem("patientId");
+  if (!patient_id) {
+    console.error('No patient_id found in sessionStorage');
+    return; // Exit function if no patient_id is found
+  }
 
-  window.sessionStorage.setItem("patients", JSON.stringify(filtered));
-  window.sessionStorage.removeItem("patientData");
+  try {
+    const response = await fetch('https://asnoise-4.onrender.com/api/patients/deletePatient', { 
+      method: 'DELETE', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ patient_id })
+    });
 
-  window.location.href = ".Doctor_homepage.html";
+    const result = await response.json();  
+
+    if (response.ok) {
+      console.log('Patient deleted successfully:', result.message);
+      window.location.href = "Doctor_homepage.html"; 
+    } else {
+      console.error('Failed to delete patient:', result.error);
+      document.getElementById('profile-img').innerHTML = '<p>Error deleting patient</p>';
+    }
+  } catch (error) {
+    console.error('Error deleting patient:', error);
+    document.getElementById('profile-img').innerHTML = '<p>Error deleting patient</p>';
+  }
 }
 
 
