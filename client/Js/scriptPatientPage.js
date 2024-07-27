@@ -3,7 +3,7 @@ window.onload = () => {
   initializePage();
   const removeBtn = document.getElementById("trash-icon");
   removeBtn.onclick = removePatient;
-  printprofailpic();
+  printProfilePic();
 };
 
 async function initializePage() {
@@ -34,7 +34,7 @@ function initializeInfo(p) {
   patient = p;
 
   window.sessionStorage.setItem("patientData", JSON.stringify(patient));
-  document.getElementById("profile-picture").src = patient.photo;
+  document.getElementById("profile-picture").src =  `./images/${ patient.photo}`;
   document.getElementById("profile-picture").alt = patient.name;
   document.getElementById("name").textContent =`${patient.first_name} ${patient.last_name}`; 
   document.getElementById("age").textContent = patient.age;
@@ -243,28 +243,32 @@ async function removePatient() {
 }
 
 
-
-async function printprofailpic() {
+async function printProfilePic() {
   const username = window.sessionStorage.getItem('userName');
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/users/getUserFirstNameAndPhotoAndId', {
-      method: 'POST',
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username})
+      }
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
 
     const data = await response.json();
     const profilePicDiv = document.getElementById('profile_img');
     if (data.success && data.photo) {
       const imgElement = document.createElement('img');
       imgElement.classList.add('profile-pic')
-      imgElement.src = data.photo; 
+      imgElement.src = `./images/${data.photo}`;
       imgElement.alt = "Profile Picture";
+      window.sessionStorage.setItem('doctorPhoto', data.photo);
       profilePicDiv.innerHTML = '';
       profilePicDiv.appendChild(imgElement);
       const userName =  data.first_name;
+      window.sessionStorage.setItem('doctorFirstName', data.first_name);
       const userNameElement = document.getElementById('user-name');
       if (userNameElement) {
        userNameElement.textContent = userName ? userName : 'Guest'; 
@@ -279,7 +283,7 @@ async function printprofailpic() {
        userNameElement.textContent = 'Guest'; 
     }
   } catch (error) {
-    console.error('Error fetching profile picture:', error);
+    console.error('Error fetching profile picture:',username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }

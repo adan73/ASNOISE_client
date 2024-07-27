@@ -1,5 +1,5 @@
 window.onload = () => {
-    printprofailpic();
+  printProfilePic();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById("email").value;
         const career = document.getElementById("Career").value;
         const address = document.getElementById("Address").value;
-        const photo = 'https://cdn-icons-png.freepik.com/512/3686/3686930.png';
+        const photo = 'new_patient.png';
         const doctor =window.sessionStorage.getItem('doctorFirstName');
         const doctor_photo = window.sessionStorage.getItem('doctorPhoto');
 
@@ -56,45 +56,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-async function printprofailpic() {
-    const username = window.sessionStorage.getItem('userName');
-    try {
-      const response = await fetch('https://asnoise-4.onrender.com/api/users/getUserFirstNameAndPhotoAndId', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username})
-      });
-  
-      const data = await response.json();
-      const profilePicDiv = document.getElementById('profile_img');
-      if (data.success && data.photo) {
-        const imgElement = document.createElement('img');
-        imgElement.classList.add('profile-pic')
-        imgElement.src = data.photo; 
-        imgElement.alt = "Profile Picture";
-        window.sessionStorage.setItem('doctorPhoto', data.photo);
-        profilePicDiv.innerHTML = '';
-        profilePicDiv.appendChild(imgElement);
-        const userName =  data.first_name;
-        const userNameElement = document.getElementById('user-name');
-        window.sessionStorage.setItem('doctorFirstName', data.first_name);
-        if (userNameElement) {
-         userNameElement.textContent = userName ? userName : 'Guest'; 
-        }
-      } else {
-        const imgElement1 = document.createElement('img');
-        imgElement1.classList.add('profile-pic')
-        imgElement1.src = './images/user_first_profile.jpg';
-        imgElement1.alt = "Profile Picture";
-        profilePicDiv.appendChild(imgElement1);
-        const userNameElement = document.getElementById('user-name');
-         userNameElement.textContent = 'Guest'; 
+async function printProfilePic() {
+  const username = window.sessionStorage.getItem('userName');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } catch (error) {
-      console.error('Error fetching profile picture:', error);
-      document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+
+    const data = await response.json();
+    const profilePicDiv = document.getElementById('profile_img');
+    if (data.success && data.photo) {
+      const imgElement = document.createElement('img');
+      imgElement.classList.add('profile-pic')
+      imgElement.src = `./images/${data.photo}`;
+      imgElement.alt = "Profile Picture";
+      window.sessionStorage.setItem('doctorPhoto', data.photo);
+      profilePicDiv.innerHTML = '';
+      profilePicDiv.appendChild(imgElement);
+      const userName =  data.first_name;
+      window.sessionStorage.setItem('doctorFirstName', data.first_name);
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement) {
+       userNameElement.textContent = userName ? userName : 'Guest'; 
+      }
+    } else {
+      const imgElement1 = document.createElement('img');
+      imgElement1.classList.add('profile-pic')
+      imgElement1.src = './images/user_first_profile.jpg';
+      imgElement1.alt = "Profile Picture";
+      profilePicDiv.appendChild(imgElement1);
+      const userNameElement = document.getElementById('user-name');
+       userNameElement.textContent = 'Guest'; 
+    }
+  } catch (error) {
+    console.error('Error fetching profile picture:',username);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
-  
+}
