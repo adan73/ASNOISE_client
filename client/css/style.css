@@ -1610,6 +1610,9 @@ font-size: 20px;
   border-radius: 50%;
   margin-right: 0.5rem;
   object-fit: cover;
+  color: #FFFFFF;
+  object-position: center;
+  font-size: 12px;
 }
 .chat-footer {
   display: flex;

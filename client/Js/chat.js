@@ -49,7 +49,7 @@ function appendMessage(chatBody, message, currentUser) {
     //replace the photos paths 
     imgElement.classList.add('user-icon');
     imgElement.src = message.sender === 'doctor' ? 'images/doctor-image.jpg' : 'images/patient-image.jpg';
-
+    imgElement.alt = message.sender === 'doctor' ? 'dr Photo' : 'patient Photo';
     messageContent.textContent = message.chat;
 
     if (message.sender === currentUser) {
