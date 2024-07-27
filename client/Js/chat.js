@@ -1,7 +1,7 @@
 window.onload = () => {
     const messageDataUrl = 'test.json'; // URL to JSON file (data)
     let lastMessageId = 0;
-    const currentUser = 'patient'; // Change this based on user type (docor, patient)
+    const currentUser = 'patient'; // Change this based on user type (doctor, patient)
 
     const textarea = document.querySelector('.chat-footer textarea');
     textarea.value = '';
@@ -22,8 +22,6 @@ async function loadMessages(lastMessageId, currentUser) {
         if (data.messages.length === 0) {
             const noMessagesElement = document.createElement('p');
             noMessagesElement.textContent = 'You have no messages yet';
-            noMessagesElement.style.textAlign = 'center';
-            noMessagesElement.style.color = '#fff';
             chatBody.appendChild(noMessagesElement);
         } else {
             data.messages.forEach(message => {
