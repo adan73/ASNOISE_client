@@ -1,7 +1,7 @@
 window.onload = () => {
-    const messageDataUrl = ''; // URL to JSON file (data)
+    const messageDataUrl = 'test.json'; // URL to JSON file (data)
     let lastMessageId = 0;
-    const currentUser = 'patient'; // Change this based on user 
+    const currentUser = 'patient'; // Change this based on user type (docor, patient)
 
     const textarea = document.querySelector('.chat-footer textarea');
     textarea.value = '';
@@ -15,7 +15,7 @@ window.onload = () => {
 
 async function loadMessages(lastMessageId, currentUser) {
     try {
-        const response = await fetch('test.json');
+        const response = await fetch('test.json');//url to data add 
         const data = await response.json();
         const chatBody = document.querySelector('.chat-body');
         chatBody.innerHTML = '';
@@ -38,8 +38,6 @@ async function loadMessages(lastMessageId, currentUser) {
         const chatBody = document.querySelector('.chat-body');
         const noChat = document.createElement('p');
         noChat.textContent = 'Error fetching chat history.';
-        noChat.style.color = '#fff';
-        noChat.style.textAlign = 'center';
         chatBody.appendChild(noChat);
     }
 }
@@ -52,7 +50,7 @@ function appendMessage(chatBody, message, currentUser) {
     imgElement.classList.add('user-icon');
     imgElement.src = message.sender === 'doctor' ? 'images/doctor-image.jpg' : 'images/patient-image.jpg';
 
-    messageContent.textContent = message.text;
+    messageContent.textContent = message.chat;
 
     if (message.sender === currentUser) {
         messageElement.className = 'userPatient';
@@ -94,7 +92,7 @@ function sendMessage(text, currentUser) {
     console.log('Sending message:', text);
 
     const chatBody = document.querySelector('.chat-body');
-    appendMessage(chatBody, { sender: currentUser, text: text }, currentUser);
+    appendMessage(chatBody, { sender: currentUser, chat: text }, currentUser);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
 
