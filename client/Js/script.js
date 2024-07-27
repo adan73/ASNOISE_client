@@ -1,23 +1,24 @@
 window.onload = () => {
-    printprofailpic();
+    printProfilePic();
     PrintPatientsList();
     BuildCalendar();
     build_the_progress();
     print_x();
     print_patient_age_for_digram();
 };
+
 async function PrintPatientsList() {
   
-  const username =window.sessionStorage.getItem('doctorFirstName');
-  const photo = window.sessionStorage.getItem('doctorPhoto');
+  const doctor =window.sessionStorage.getItem('doctorFirstName');
+  const doctor_photo = window.sessionStorage.getItem('doctorPhoto');
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/patients/getDoctorPatients', {
-      method: 'POST',
+    const response = await fetch(`https://asnoise-4.onrender.com/api/patients/${doctor}/${doctor_photo}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({username , photo})
+      }
     });
+
     const data = await response.json();
     loadJSONData(data);
     } catch (error) {
@@ -39,7 +40,7 @@ async function PrintPatientsList() {
       img.classList.add("patione-img");
       
          
-      img.src =  patient.photo ;
+      img.src =  `./images/${ patient.photo}`;
       img.alt = patient.first_name;
 
       const patientName = document.createElement("div");
@@ -63,6 +64,7 @@ async function PrintPatientsList() {
     window.sessionStorage.setItem("patient", JSON.stringify(data.patients));
   }
   }
+
 
   function build_the_progress() {
     const yAxisContainer = document.querySelector(".y-axis");
@@ -298,23 +300,26 @@ async function Show_User_Activity(selectedDate) {
   }
 }
 
-async function printprofailpic() {
+async function printProfilePic() {
   const username = window.sessionStorage.getItem('userName');
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/users/getUserFirstNameAndPhotoAndId', {
-      method: 'POST',
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username})
+      }
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
 
     const data = await response.json();
     const profilePicDiv = document.getElementById('profile_img');
     if (data.success && data.photo) {
       const imgElement = document.createElement('img');
       imgElement.classList.add('profile-pic')
-      imgElement.src = data.photo; 
+      imgElement.src = `./images/${data.photo}`;
       imgElement.alt = "Profile Picture";
       window.sessionStorage.setItem('doctorPhoto', data.photo);
       profilePicDiv.innerHTML = '';
@@ -335,7 +340,7 @@ async function printprofailpic() {
        userNameElement.textContent = 'Guest'; 
     }
   } catch (error) {
-    console.error('Error fetching profile picture:', error);
+    console.error('Error fetching profile picture:',username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }
