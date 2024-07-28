@@ -51,9 +51,23 @@ function appendMessage(chatBody, message, currentUser) {
     const messageElement = document.createElement('div');
     const imgElement = document.createElement('img');
     const messageContent = document.createElement('p');
-    //replace the photos paths 
+    let doctorimg ='' ; 
+    let patientimg = '';
+    if (currentUser === 'patient') {
+        doctorimg = sessionStorage.getItem('patient-doc-img');
+        patientimg = sessionStorage.getItem('userPatientImg');
+    }
+    else {
+        doctorimg = `./images/${sessionStorage.getItem('doctorPhoto')}`;
+        if (window.sessionStorage.getItem("patientData").photo) {
+            patientimg = `./images/${window.sessionStorage.getItem("patientData").photo}`;
+        }
+        else {
+            patientimg = './images/user_first_profile.jpg';
+        }
+    }
     imgElement.classList.add('user-icon');
-    imgElement.src = message.sender === 'doctor' ? 'images/doctor-image.jpg' : 'images/patient-image.jpg';
+    imgElement.src = message.sender === 'doctor' ? doctorimg : patientimg;
     imgElement.alt = message.sender === 'doctor' ? 'dr Photo' : 'patient Photo';
     messageContent.textContent = message.chat;
 

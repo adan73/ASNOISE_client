@@ -237,7 +237,7 @@ async function UpdateDRinformation() {
     }
     const data = await response.json();
     const doctorName = data.doctor;
-    const doctorImage = data.doctor_photo;
+    const doctorImage = data.doctor_photo;  
     document.getElementById('DrName').innerHTML = '';
     const imageContainer = document.getElementById('DRimg');
     const newImage = document.createElement('img');
@@ -246,14 +246,16 @@ async function UpdateDRinformation() {
       document.getElementById('DrName').textContent = doctorName;
     }
     if (doctorImage) {
-      newImage.src = doctorImage;
+      newImage.src = doctorImage;   //or is it like `./images/${data.doctor_photo}` if it is like this i have to update  the session storage in the line 252 in this file 
       imageContainer.innerHTML = '';
       imageContainer.appendChild(newImage);
+      sessionStorage.setItem('patient-doc-img', data.doctor_photo);
     }
     else {
       newImage.src = "images/user_first_profile.jpg";
       imageContainer.innerHTML = '';
       imageContainer.appendChild(newImage);
+      sessionStorage.setItem('patient-doc-img', "images/user_first_profile.jpg");
     }
   }
   catch (error) {
@@ -264,6 +266,7 @@ async function UpdateDRinformation() {
     newImage.src = "images/user_first_profile.jpg";
     imageContainer.innerHTML = '';
     imageContainer.appendChild(newImage);
+    sessionStorage.setItem('patient-doc-img', "images/user_first_profile.jpg");
   }
 }
 async function printProfilePic() {
@@ -283,6 +286,7 @@ async function printProfilePic() {
     window.sessionStorage.setItem('patientId', data.id);
     const profilePicDiv = document.getElementById('profile_img');
     if (data.success && data.photo) {
+      window.sessionStorage.setItem('userPatientImg',`./images/${data.photo}`);
       const imgElement = document.createElement('img');
       imgElement.classList.add('profile-pic')
       imgElement.src = `./images/${data.photo}`;
@@ -298,6 +302,7 @@ async function printProfilePic() {
       const imgElement1 = document.createElement('img');
       imgElement1.classList.add('profile-pic')
       imgElement1.src = './images/user_first_profile.jpg';
+      window.sessionStorage.setItem('userPatientImg','./images/user_first_profile.jpg');
       imgElement1.alt = "Profile Picture";
       profilePicDiv.appendChild(imgElement1);
       const userNameElement = document.getElementById('user-name');
