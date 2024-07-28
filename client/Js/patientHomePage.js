@@ -1,9 +1,5 @@
 window.onload = () => {
-  const userName = window.sessionStorage.getItem('userName');
-  const userNameElement = document.getElementById('user-name');
-  if (userNameElement) {
-    userNameElement.textContent = userName ? userName : 'Guest';
-  }
+  printProfilePic();
   const chatIcon = document.getElementById("chat-icon");
   chatIcon.addEventListener("click", () => window.location.href = "chatpage.html")
   BuildCalendar();
@@ -161,7 +157,7 @@ async function UpdateTreatmentList() {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const patientId = 8;//chage names based on database the patientId
+    const patientId = window.sessionStorage.getItem('patientId');
     const data = await response.json();
     const patient = data.patients.find(p => p.patient_id === patientId);
     const ul = document.getElementById('treatmentList');
@@ -228,23 +224,87 @@ function delay(ms) {
 }
 
 async function UpdateDRinformation() {
+  const patient_id = window.sessionStorage.getItem('patientId');
   try {
-    const response = await fetch('test.json'); // Change this to your JSON file URL
+    const response = await fetch(`https://asnoise-4.onrender.com/api/patients/${patient_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    const doctorName = data.name;
-    const doctorImageUrl = data.imageUrl;
-    document.getElementById('DrName').textContent = doctorName;
+    const doctorName = data.doctor;
+    const doctorImage = data.doctor_photo;
+    document.getElementById('DrName').innerHTML = '';
     const imageContainer = document.getElementById('DRimg');
     const newImage = document.createElement('img');
-    newImage.src = doctorImageUrl;
     newImage.alt = 'Dr Image';
-    imageContainer.innerHTML = '';
-    imageContainer.appendChild(newImage);
+    if (doctorName) {
+      document.getElementById('DrName').textContent = doctorName;
+    }
+    if (doctorImage) {
+      newImage.src = doctorImage;
+      imageContainer.innerHTML = '';
+      imageContainer.appendChild(newImage);
+    }
+    else {
+      newImage.src = "images/user_first_profile.jpg";
+      imageContainer.innerHTML = '';
+      imageContainer.appendChild(newImage);
+    }
   }
   catch (error) {
     console.error('Error fetching or processing data:', error);
+    const imageContainer = document.getElementById('DRimg');
+    const newImage = document.createElement('img');
+    newImage.alt = 'Dr Image';
+    newImage.src = "images/user_first_profile.jpg";
+    imageContainer.innerHTML = '';
+    imageContainer.appendChild(newImage);
+  }
+}
+async function printProfilePic() {
+  const username = window.sessionStorage.getItem('userName');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    window.sessionStorage.setItem('patientId', data.id);
+    const profilePicDiv = document.getElementById('profile_img');
+    if (data.success && data.photo) {
+      const imgElement = document.createElement('img');
+      imgElement.classList.add('profile-pic')
+      imgElement.src = `./images/${data.photo}`;
+      imgElement.alt = "Profile Picture";
+      profilePicDiv.innerHTML = '';
+      profilePicDiv.appendChild(imgElement);
+      const userName =  data.first_name;
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement) {
+       userNameElement.textContent = userName ? userName : 'Guest'; 
+      }
+    } else {
+      const imgElement1 = document.createElement('img');
+      imgElement1.classList.add('profile-pic')
+      imgElement1.src = './images/user_first_profile.jpg';
+      imgElement1.alt = "Profile Picture";
+      profilePicDiv.appendChild(imgElement1);
+      const userNameElement = document.getElementById('user-name');
+       userNameElement.textContent = 'Guest'; 
+    }
+  } catch (error) {
+    console.error('Error fetching profile picture:',username);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVNOISE|Homepage</title>
+    <link rel="website icon" type="png" href="images/logo_icon_photo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -14,13 +15,13 @@
     <header>
         <a href="#" id="logo"></a>
         <div class="profile">
-            <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
-            <div class="profile-pic-wrapper">
-                <img src="images/user_first_profile.jpg" alt="profile picture" class="profile-pic" />
-                <span class="status-dot"></span>
-            </div>
+          <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
+          <div class="profile-pic-wrapper">
+            <div id="profile_img"></div>
+            <span class="status-dot"></span>
+          </div>
         </div>
-    </header>
+      </header>
     <main class="main-wrapper">
         <section class="activitylist">
             <section>
@@ -48,7 +49,7 @@
                     <div class="Doc-info">
                         <div id="DRimg"></div>
                         <div class="dr-info">
-                            <p><b id="DrName">Dr. Jane Doe </b> is a distinguished ADHD specialist with a decade of experience in diagnosing and treating Attention Deficit Hyperactivity Disorder.</p>
+                            <p><b>Dr.<span id="DrName"></span></b> is a distinguished ADHD specialist with a decade of experience in diagnosing and treating Attention Deficit Hyperactivity Disorder.</p>
                             <div class="contact-icons">
                                 <i class='fas fa-at'></i>
                                 <i id="chat-icon"class='far fa-comment-dots'></i>
