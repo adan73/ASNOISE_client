@@ -32,10 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (data.success) {
                     window.sessionStorage.setItem('userName', username);
+                    window.sessionStorage.setItem('UserType', data.user_type);
                     if (data.user_type === 'doctor') {
                         window.location.href = 'Doctor_homepage.html';
                     } else {
-                        window.location.href = 'Doctor_homepage.html';
+                        window.location.href = 'patientHomePage.html';
                     }
                 } else {
                     alert(data.error || 'Login failed');
@@ -83,10 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (data.success) {
                     window.sessionStorage.setItem('userName', username);
+                    window.sessionStorage.setItem('UserType', data.user_type);
                     if(user_type === 'doctor')
                     window.location.href = 'Doctor_homepage.html';
                     else{
-                        window.location.href = 'patienside.html';  
+                        window.location.href = 'patientHomePage.html';  
                     }
                 } else {
                     alert(data.error || 'Sign in failed');

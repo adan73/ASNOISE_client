@@ -1,8 +1,8 @@
 window.onload = () => {
     const messageDataUrl = 'test.json'; // URL to JSON file (data)
     let lastMessageId = 0;
-    const currentUser = 'patient'; // Change this based on user type (doctor, patient)
-
+    const currentUser = window.sessionStorage.getItem('UserType'); // Change this based on user type (doctor, patient)
+    const username = window.sessionStorage.getItem('userName');
     const textarea = document.querySelector('.chat-footer textarea');
     textarea.value = '';
     textarea.placeholder = 'Ask me Anything......';
