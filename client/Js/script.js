@@ -1,26 +1,34 @@
 window.onload = () => {
-    const userName = window.sessionStorage.getItem('userName');
-    
-    const userNameElement = document.getElementById('user-name');
-    if (userNameElement) {
-        userNameElement.textContent = userName ? userName : 'Guest'; 
-    }
-
+    printProfilePic();
     PrintPatientsList();
     BuildCalendar();
+    build_the_progress();
+    print_x();
+    print_patient_age_for_digram();
 };
 
-function PrintPatientsList() {
-    fetch("https://asnoise-4.onrender.com/api/patients/Allpatients")
-      .then((response) => response.json())
-      .then((data) => {
-        loadJSONData(data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+async function PrintPatientsList() {
+  
+  const doctor =window.sessionStorage.getItem('doctorFirstName');
+  const doctor_photo = window.sessionStorage.getItem('doctorPhoto');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/patients/${doctor}/${doctor_photo}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    loadJSONData(data);
+    } catch (error) {
+    console.error('Error fetching profile picture:', error);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+    }
   }
   
   function loadJSONData(data) {
-    const personInfo = document.getElementById("result");
+    const personInfo = document.getElementById("patient");
     personInfo.innerHTML = ''; 
   
     const ul = document.createElement("ul");
@@ -32,7 +40,7 @@ function PrintPatientsList() {
       img.classList.add("patione-img");
       
          
-      img.src =  patient.photo ;
+      img.src =  `./images/${ patient.photo}`;
       img.alt = patient.first_name;
 
       const patientName = document.createElement("div");
@@ -52,10 +60,11 @@ function PrintPatientsList() {
   
     personInfo.appendChild(ul);
     
-  if (!window.sessionStorage.getItem("result")) {
-    window.sessionStorage.setItem("result", JSON.stringify(data.patients));
+  if (!window.sessionStorage.getItem("patient")) {
+    window.sessionStorage.setItem("patient", JSON.stringify(data.patients));
   }
   }
+
 
   function build_the_progress() {
     const yAxisContainer = document.querySelector(".y-axis");
@@ -239,59 +248,99 @@ function PrintPatientsList() {
       PrintTheDaysInMonthCalendar(currentYear, currentMonth);
     }
 }
+async function Show_User_Activity(selectedDate) {
+  try {
+    const date = selectedDate;
+    const username = window.sessionStorage.getItem('userName');
+    const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, date })
+    });
 
-  async function Show_User_Activity(selectedDate) {
-    try {
-      const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({selectedDate })
-      });
-  
-      const data = await response.json();
-  
-      const activityInfo = document.getElementById('activity');
-      const ul = document.createElement('ul');
-      activityInfo.innerHTML = ""; // Clear previous activities
-  
-      if (data.error) {
-        const noActivity = document.createElement('p');
-        noActivity.textContent = 'Error fetching activities.';
-        activityInfo.appendChild(noActivity);
-      } else if (data.length === 0) {
-        // Handle the case where there are no activities for the selected date
-        const noActivity = document.createElement('p');
-        noActivity.classList.add("no_activity_text")
-        noActivity.textContent = 'No activity for this day.';
-        activityInfo.appendChild(noActivity);
-      } else {
-        // Display the activities
-        data.forEach(activity => {
-          const li = document.createElement('li');
-    
-          const activitytime = document.createElement('div');
-          activitytime.textContent = activity.time;
-          activitytime.classList.add('time_text');
-          
-          const theActivity = document.createElement('div');
-          theActivity.textContent = activity.the_activity;
-          theActivity.classList.add('active_text');
-    
-          li.appendChild(activitytime);
-          li.appendChild(theActivity);
-          ul.appendChild(li);
-        });
-        activityInfo.appendChild(ul);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      const activityInfo = document.getElementById('activity');
+    const data = await response.json();
+
+    const activityInfo = document.getElementById('activity');
+    const ul = document.createElement('ul');
+    activityInfo.innerHTML = ""; 
+
+    if (data.error) {
       const noActivity = document.createElement('p');
-      noActivity.textContent = 'Error fetching activities.';
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
       activityInfo.appendChild(noActivity);
+    } else if (data.length === 0) {
+      const noActivity = document.createElement('p');
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
+      activityInfo.appendChild(noActivity);
+    } else {
+      data.forEach(activity => {
+        const li = document.createElement('li');
+        const activitytime = document.createElement('div');
+        activitytime.textContent = activity.time;
+        activitytime.classList.add('time_text');
+        const theActivity = document.createElement('div');
+        theActivity.textContent = activity.the_activity;
+        theActivity.classList.add('active_text');
+        li.appendChild(activitytime);
+        li.appendChild(theActivity);
+        ul.appendChild(li);
+      });
+      activityInfo.appendChild(ul);
     }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('activity');
+    const noActivity = document.createElement('p');
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
+    activityInfo.appendChild(noActivity);
   }
- 
-  
+}
+
+async function printProfilePic() {
+  const username = window.sessionStorage.getItem('userName');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    const profilePicDiv = document.getElementById('profile_img');
+    if (data.success && data.photo) {
+      const imgElement = document.createElement('img');
+      imgElement.classList.add('profile-pic')
+      imgElement.src = `./images/${data.photo}`;
+      imgElement.alt = "Profile Picture";
+      window.sessionStorage.setItem('doctorPhoto', data.photo);
+      profilePicDiv.innerHTML = '';
+      profilePicDiv.appendChild(imgElement);
+      const userName =  data.first_name;
+      window.sessionStorage.setItem('doctorFirstName', data.first_name);
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement) {
+       userNameElement.textContent = userName ? userName : 'Guest'; 
+      }
+    } else {
+      const imgElement1 = document.createElement('img');
+      imgElement1.classList.add('profile-pic')
+      imgElement1.src = './images/user_first_profile.jpg';
+      imgElement1.alt = "Profile Picture";
+      profilePicDiv.appendChild(imgElement1);
+      const userNameElement = document.getElementById('user-name');
+       userNameElement.textContent = 'Guest'; 
+    }
+  } catch (error) {
+    console.error('Error fetching profile picture:',username);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+  }
+}

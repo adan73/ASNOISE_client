@@ -3,6 +3,7 @@ window.onload = () => {
   initializePage();
   const removeBtn = document.getElementById("trash-icon");
   removeBtn.onclick = removePatient;
+  printProfilePic();
 };
 
 async function initializePage() {
@@ -33,17 +34,20 @@ function initializeInfo(p) {
   patient = p;
 
   window.sessionStorage.setItem("patientData", JSON.stringify(patient));
-  document.getElementById("profile-picture").src = patient.photo;
+  document.getElementById("profile-picture").src =  `./images/${ patient.photo}`;
   document.getElementById("profile-picture").alt = patient.name;
-  document.getElementById("name").textContent = patient.name;
+  document.getElementById("name").textContent =`${patient.first_name} ${patient.last_name}`; 
   document.getElementById("age").textContent = patient.age;
   document.getElementById("adhd-stage").textContent = patient.adhdStage;
 
-  document.getElementById("id").textContent = patient.id;
+  document.getElementById("id").textContent = patient.patient_id;
   document.getElementById("hmo").textContent = patient.hmo;
   document.getElementById("email").textContent = patient.email;
   document.getElementById("phone").textContent = patient.phone;
   document.getElementById("address").textContent = patient.address;
+
+  window.sessionStorage.setItem('patientId', patient.patient_id);
+
 
   const treatmentMethods = document.querySelector(".methods ul");
   patient.treatment?.methods?.forEach((method) => {
@@ -207,12 +211,79 @@ function BuildCalendar() {
   }
 }
 
-function removePatient() {
-  const patients = JSON.parse(window.sessionStorage.getItem("patients"));
-  const filtered = patients.filter((p) => p.id !== patient.id);
+async function removePatient() {
+  const patient_id = window.sessionStorage.getItem("patientId");
+  if (!patient_id) {
+    console.error('No patient_id found in sessionStorage');
+    return; // Exit function if no patient_id is found
+  }
 
-  window.sessionStorage.setItem("patients", JSON.stringify(filtered));
-  window.sessionStorage.removeItem("patientData");
+  try {
+    const response = await fetch('https://asnoise-4.onrender.com/api/patients/deletePatient', { 
+      method: 'DELETE', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ patient_id })
+    });
 
-  window.location.href = "index.html";
+    const result = await response.json();  
+
+    if (response.ok) {
+      console.log('Patient deleted successfully:', result.message);
+      window.location.href = "Doctor_homepage.html"; 
+    } else {
+      console.error('Failed to delete patient:', result.error);
+      document.getElementById('profile-img').innerHTML = '<p>Error deleting patient</p>';
+    }
+  } catch (error) {
+    console.error('Error deleting patient:', error);
+    document.getElementById('profile-img').innerHTML = '<p>Error deleting patient</p>';
+  }
+}
+
+
+async function printProfilePic() {
+  const username = window.sessionStorage.getItem('userName');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    const profilePicDiv = document.getElementById('profile_img');
+    if (data.success && data.photo) {
+      const imgElement = document.createElement('img');
+      imgElement.classList.add('profile-pic')
+      imgElement.src = `./images/${data.photo}`;
+      imgElement.alt = "Profile Picture";
+      window.sessionStorage.setItem('doctorPhoto', data.photo);
+      profilePicDiv.innerHTML = '';
+      profilePicDiv.appendChild(imgElement);
+      const userName =  data.first_name;
+      window.sessionStorage.setItem('doctorFirstName', data.first_name);
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement) {
+       userNameElement.textContent = userName ? userName : 'Guest'; 
+      }
+    } else {
+      const imgElement1 = document.createElement('img');
+      imgElement1.classList.add('profile-pic')
+      imgElement1.src = './images/user_first_profile.jpg';
+      imgElement1.alt = "Profile Picture";
+      profilePicDiv.appendChild(imgElement1);
+      const userNameElement = document.getElementById('user-name');
+       userNameElement.textContent = 'Guest'; 
+    }
+  } catch (error) {
+    console.error('Error fetching profile picture:',username);
+    document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+  }
 }
