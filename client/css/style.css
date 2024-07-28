@@ -44,6 +44,7 @@
     height: 25px;
     margin-right: 6px;
     color: #598b83;
+    cursor: pointer;
   }
   
   #logo{
@@ -1526,16 +1527,16 @@ font-size: 20px;
   box-sizing: border-box;
 }
 
-.chatLogo {
+#chatLogo {
   width: 120px;
   height: 40px;
   background-color: white;
   border-radius: 75px;
   overflow: hidden;
-
+  cursor: pointer;
 }
 
-.chatLogo img {
+#chatLogo img {
   object-fit: contain;
   align-items: center;
   justify-content: center;
@@ -1543,9 +1544,6 @@ font-size: 20px;
   height: 105%;
 }
 
-.chatLogo a {
-  text-decoration: none;
-}
 ::-webkit-scrollbar {
   width: 05px;
 }

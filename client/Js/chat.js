@@ -1,15 +1,22 @@
 window.onload = () => {
     const messageDataUrl = 'test.json'; // URL to JSON file (data)
     let lastMessageId = 0;
-    const currentUser = window.sessionStorage.getItem('UserType'); // Change this based on user type (doctor, patient)
+    const currentUser = window.sessionStorage.getItem('UserType'); 
     const username = window.sessionStorage.getItem('userName');
     const textarea = document.querySelector('.chat-footer textarea');
     textarea.value = '';
     textarea.placeholder = 'Ask me Anything......';
-
     loadMessages(lastMessageId, currentUser);
     setupSendButton(currentUser);
     startMessagePolling(messageDataUrl, lastMessageId, currentUser);
+    const logopic = document.getElementById("chatLogo");
+    logopic.addEventListener("click", () => {
+        if (currentUser === 'doctor') {
+            window.location.href = "Doctor_homepage.html"; 
+        } else {
+            window.location.href = "patientHomePage.html"; 
+        }
+    });
 };
 
 
