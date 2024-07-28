@@ -1,3 +1,14 @@
+window.onload = () => {
+  loadFormData();
+
+  document.getElementById("image").oninput = function (event) {
+    previewImage();
+  };
+  printProfilePic();
+  document.getElementById("save").onclick = () => savePatientInfo();
+};
+
+
 function loadFormData() {
   const formData = JSON.parse(
     window.sessionStorage.getItem("patientData") ?? "{}"
@@ -8,45 +19,73 @@ function loadFormData() {
     return;
   }
 
-  document.getElementById("name").value = formData.name ?? "";
+  document.getElementById("first_name").value =formData.first_name  ?? "";
+  document.getElementById("last_name").value =formData.last_name  ?? "";
   document.getElementById("age").value = formData.age ?? "";
-  document.getElementById("stage").value = formData.stage ?? "";
-  document.getElementById("id").value = formData.id ?? "";
+  document.getElementById("stage").value = formData.adhdStage ?? "";
+  document.getElementById("id").value = formData.patient_id ?? "";
   document.getElementById("email").value = formData.email ?? "";
   document.getElementById("phone").value = formData.phone ?? "";
   document.getElementById("address").value = formData.address ?? "";
   document.getElementById("hmo").value = formData.hmo ?? "";
+  window.sessionStorage.setItem('patient_photo',formData.photo,) ;
   const previewImage = document.getElementById("preview-image");
-  previewImage.src = formData.photo ?? "";
+  previewImage.src =  `./images/${formData.photo}` ?? "";
   previewImage.style.display = formData.photo ? "block" : "none";
 }
-
-function savePatientInfo() {
+async function savePatientInfo() {
   const formData = {
-    name: document.getElementById("name").value,
+    first_name: document.getElementById("first_name").value,
+    last_name: document.getElementById("last_name").value,
     age: document.getElementById("age").value,
-    stage: document.getElementById("stage").value,
-    id: document.getElementById("id").value,
+    adhdStage: document.getElementById("stage").value,  
+    patient_id: document.getElementById("id").value,
     email: document.getElementById("email").value,
     phone: document.getElementById("phone").value,
     address: document.getElementById("address").value,
     hmo: document.getElementById("hmo").value,
-    photo: document.getElementById("preview-image").src,
+    photo: window.sessionStorage.getItem('patient_photo') , 
+    doctor:window.sessionStorage.getItem('doctorFirstName'),
+    doctor_photo: window.sessionStorage.getItem('doctorPhoto')
   };
 
   window.sessionStorage.setItem("patientData", JSON.stringify(formData));
 
-  const patients = JSON.parse(window.sessionStorage.getItem("patients"));
+  let patients = JSON.parse(window.sessionStorage.getItem("patients")) || [];
   const patientIndex = patients.findIndex(
-    (patient) => patient.id === formData.id
+    (patient) => patient.patient_id === formData.patient_id
   );
+
   if (patientIndex !== -1) {
     patients[patientIndex] = formData;
+  } else {
+    patients.push(formData); 
   }
+
   window.sessionStorage.setItem("patients", JSON.stringify(patients));
 
-  navigateToPatientPage();
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/patients/${formData.patient_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.json();
+    console.log('Patient updated successfully:', result);
+    window.location.href = "patientPage.html"; 
+  } catch (error) {
+    console.error('Error updating patient:', error);
+    alert('Failed to update patient info');
+  }
 }
+
 
 function previewImage() {
   const imgInput = document.getElementById("image");
@@ -58,19 +97,6 @@ function previewImage() {
   const previewImage = document.getElementById("preview-image");
   previewImage.src = URL.createObjectURL(img);
   previewImage.style.display = "block";
-}
-
-window.onload = () => {
-  loadFormData();
-
-  document.getElementById("image").oninput = function (event) {
-    previewImage();
-  };
-};
-
-
-function navigateToPatientPage() {
-    window.location.href = "patientPage.html";
 }
 
 

@@ -1360,3 +1360,114 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+.patient-edit-form-body {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.patient-edit-form-container {
+  font-family: Arial, sans-serif;
+  background-color: #E0F2F1;
+  color: #2E7067;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 65vw;
+}
+.patient-edit-form-container h1 {
+  color: #2E7067;
+}
+.patient-edit-form-section {
+  margin-bottom: 20px;
+}
+.patient-edit-form-section-title {
+  background-color: rgba(170, 224, 208, 1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.patient-edit-form-section label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.patient-edit-form-section input[type="text"], 
+.patient-edit-form-section input[type="email"], 
+.patient-edit-form-section input[type="tel"], 
+.patient-edit-form-section input[type="number"], 
+.patient-edit-form-section input[type="file"], 
+.patient-edit-form-section textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #598b83;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.patient-edit-form-image-container {
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+.patient-edit-form-section img {
+  max-width: 100px;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid #598b83;
+  border-radius: 5px;
+}
+.patient-edit-form-submit-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 20px 0;
+}
+.patient-edit-form-submit-button:hover {
+  background-color: #45a049;
+}
+
+.patient-edit-form-cancel-button {
+  padding: 10px 20px;
+  background-color: #598b83;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 20px 0;
+}
+.patient-edit-form-cancel-button:hover {
+  background-color: #456963;
+}
+
+.patient-edit-form-footer {
+  background-color: #598b83;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.f_name{
+  top: 190px;
+  right: 286px;
+  position: relative;
+}
