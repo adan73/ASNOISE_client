@@ -1,7 +1,7 @@
 window.onload = () => {
   printProfilePic();
   const chatIcon = document.getElementById("chat-icon");
-  chatIcon.addEventListener("click", () => window.location.href = "chatpage.html")
+  chatIcon.addEventListener("click", () => window.location.href = "chatpage.html");
   BuildCalendar();
   UpdateDRinformation();
   UpdateTreatmentList();
