@@ -11,7 +11,6 @@ window.onload = () => {
   UpdateTreatmentList();
   monitorNotifications();
 };
-
 function BuildCalendar() {
   const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
   const months = [
@@ -66,10 +65,12 @@ function BuildCalendar() {
         dateCell.classList.add("current-date");
       }
       dateCell.textContent = i;
+      // Format date as YYYY-MM-DD
       const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
       dateCell.dataset.date = formattedDate;
-
+      
       dateCell.addEventListener("click", () => {
+        // Update selected date and highlight
         if (selectedDate) {
           const prevSelected = document.querySelector(`.date-cell[data-date="${selectedDate}"]`);
           if (prevSelected) {
@@ -85,6 +86,8 @@ function BuildCalendar() {
       });
       calendarDates.appendChild(dateCell);
     }
+
+    // Call Show_User_Activity with the current date
     Show_User_Activity(selectedDate);
   }
 
@@ -100,57 +103,56 @@ function BuildCalendar() {
     PrintTheDaysInMonthCalendar(currentYear, currentMonth);
   }
 }
-
 async function Show_User_Activity(selectedDate) {
-  try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ selectedDate })
-    });
+try {
+  const date = selectedDate;
+  const username = window.sessionStorage.getItem('userName');
+  const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, date })
+  });
 
-    const data = await response.json();
+  const data = await response.json();
 
-    const activityInfo = document.getElementById('activity');
-    const ul = document.createElement('ul');
-    activityInfo.innerHTML = "";
+  const activityInfo = document.getElementById('activity');
+  const ul = document.createElement('ul');
+  activityInfo.innerHTML = ""; 
 
-    if (data.error) {
-      const noActivity = document.createElement('p');
-      noActivity.textContent = 'Error fetching activities.';
-      activityInfo.appendChild(noActivity);
-    } else if (data.length === 0) {
-      const noActivity = document.createElement('p');
-      noActivity.classList.add("no_activity_text")
-      noActivity.textContent = 'No activity for this day.';
-      activityInfo.appendChild(noActivity);
-    } else {
-      data.forEach(activity => {
-        const li = document.createElement('li');
-
-        const activitytime = document.createElement('div');
-        activitytime.textContent = activity.time;
-        activitytime.classList.add('time_text');
-
-        const theActivity = document.createElement('div');
-        theActivity.textContent = activity.the_activity;
-        theActivity.classList.add('active_text');
-
-        li.appendChild(activitytime);
-        li.appendChild(theActivity);
-        ul.appendChild(li);
-      });
-      activityInfo.appendChild(ul);
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    const activityInfo = document.getElementById('activity');
+  if (data.error) {
     const noActivity = document.createElement('p');
-    noActivity.textContent = 'Error fetching activities.';
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'No activity for this day.';
     activityInfo.appendChild(noActivity);
+  } else if (data.length === 0) {
+    const noActivity = document.createElement('p');
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'No activity for this day.';
+    activityInfo.appendChild(noActivity);
+  } else {
+    data.forEach(activity => {
+      const li = document.createElement('li');
+      const activitytime = document.createElement('div');
+      activitytime.textContent = activity.time;
+      activitytime.classList.add('time_text');
+      const theActivity = document.createElement('div');
+      theActivity.textContent = activity.the_activity;
+      theActivity.classList.add('active_text');
+      li.appendChild(activitytime);
+      li.appendChild(theActivity);
+      ul.appendChild(li);
+    });
+    activityInfo.appendChild(ul);
   }
+} catch (error) {
+  console.error('Error fetching data:', error);
+  const activityInfo = document.getElementById('activity');
+  const noActivity = document.createElement('p');
+  noActivity.textContent = `Error fetching activities: ${error.message}`;
+  activityInfo.appendChild(noActivity);
+}
 }
 
 async function UpdateTreatmentList() {
