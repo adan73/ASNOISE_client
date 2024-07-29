@@ -2,7 +2,7 @@ let patient = null;
 window.onload = () => {
   initializePage();
   const removeBtn = document.getElementById("trash-icon");
-  removeBtn.onclick = removePatient();
+  removeBtn.onclick = removePatient;
   const chatbtn = document.getElementById("contact-patient");
   chatbtn.addEventListener("click", () => window.location.href = "chatpage.html");
   printProfilePic();
