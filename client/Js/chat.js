@@ -59,8 +59,8 @@ function appendMessage(chatBody, message, currentUser) {
     }
     else {
         doctorimg = `./images/${sessionStorage.getItem('doctorPhoto')}`;
-        if (window.sessionStorage.getItem("patientData").photo) {
-            patientimg = `./images/${window.sessionStorage.getItem("patientData").photo}`;
+        if ((JSON.parse(window.sessionStorage.getItem("patientData"))).photo) {
+            patientimg = `./images/${(JSON.parse(window.sessionStorage.getItem("patientData"))).photo}`;
         }
         else {
             patientimg = './images/user_first_profile.jpg';
@@ -107,12 +107,63 @@ function setupSendButton(currentUser) {
 }
 
 function sendMessage(text, currentUser) {
-    // Replace with actual sending logic to save the message, update the data in database
-    console.log('Sending message:', text);
-
+    if (currentUser === 'doctor') {
+        saveMessage(((JSON.parse(window.sessionStorage.getItem("patientData"))).patient_id),text,currentUser);
+    }
+    else {
+        saveMessage(window.sessionStorage.getItem('patientId'),text,currentUser);
+    }
     const chatBody = document.querySelector('.chat-body');
-    appendMessage(chatBody, { sender: currentUser, chat: text }, currentUser);
     chatBody.scrollTop = chatBody.scrollHeight;
+}
+async function saveMessage(patientId ,text, currentUser)
+{
+    const patient_id = patientId;
+    const sender = currentUser;
+    const chat = text;
+    try {/// add the url in the fetch next line to save in the database
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({patient_id,sender,chat})
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Network response was not ok: ${errorText}`);
+        }
+        const data = await response.json();
+
+        if (data.success) {
+            console.log('Sending message:', text);
+            const chatBody = document.querySelector('.chat-body');
+            appendMessage(chatBody, { sender: currentUser, chat: text }, currentUser);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        } else {
+            console.error('Error during sending message:', error);
+            const chatBody = document.querySelector('.chat-body');
+            const errormessage = document.createElement('div');
+            const icon = document.createElement('i');
+            icon.className = 'fa fa-exclamation-circle';
+            errormessage.appendChild(icon);
+            errormessage.className = 'ErrorChat';
+            chatBody.appendChild(errormessage);
+            appendMessage(errormessage, { sender: currentUser, chat: text }, currentUser);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    } catch (error) {
+        console.error('Error during saving message:', error);
+        const chatBody = document.querySelector('.chat-body');
+        const errormessage = document.createElement('p');
+        const icon = document.createElement('i');
+        icon.className = 'fa fa-exclamation-circle';
+        errormessage.appendChild(icon);
+        errormessage.className = 'ErrorChat';
+        chatBody.appendChild(errormessage);
+        appendMessage(errormessage, { sender: currentUser, chat: text }, currentUser);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
 }
 
 function startMessagePolling(messageDataUrl, lastMessageId, currentUser) {

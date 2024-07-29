@@ -1562,8 +1562,10 @@ font-size: 20px;
   padding: 0.8rem;
   font-size: 1rem;
   height: 600px;
+  max-width:  640px;;
   overflow-y: auto;
   box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 .chat-body p{
   color: #fff;
@@ -1664,6 +1666,23 @@ font-size: 20px;
   flex-direction: column;
 }
 
+.ErrorChat {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height:min-content;
+  color: red;
+  align-items: center;
+  gap: 10px;
+  justify-content: end;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+}
+.ErrorChat i {
+  color: red;
+  margin-left: 5px;
+}
+
 @media (max-width: 750px) {
   /*
   main {
@@ -1687,7 +1706,7 @@ font-size: 20px;
   }
   .chat-body {
     height: 75%;
-
+    max-width: 100%;
   }
   .chat-footer {
     margin: auto 0;
