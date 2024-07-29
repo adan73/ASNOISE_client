@@ -1723,6 +1723,21 @@ font-size: 20px;
     margin-left: 5%;
     margin-bottom: 5%;
   }
+  .patients-container {
+    left: 5%;
+  }
+  .white_back {
+    width: 260px;
+  }
+  .point-down-icon {
+    left: 40%;
+  }
+  .diagram-container {
+    left: 0px;
+  }
+  #plus-cyrcle {
+    margin-left: 245px;
+  }
   .main-wrapper  {
     min-height: 163vh ;
     flex-direction: row;  
