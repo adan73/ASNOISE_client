@@ -60,39 +60,6 @@ function initializeInfo(p) {
   const current = patient.treatment?.improvement?.current ?? 0;
   const target = patient.treatment?.improvement?.target ?? 0;
   Buildchart(current, target);
-
-  if (patient.dailyActivity?.events?.length) {
-    const tbody = document
-      .getElementById("timetable")
-      .getElementsByTagName("tbody")[0];
-
-    for (let hour = 0; hour < 24; hour++) {
-      const time = (hour < 10 ? "0" : "") + hour + ":00";
-      const row = `<tr><td>${time}</td><td></td></tr>`;
-      tbody.innerHTML += row;
-    }
-
-    patient.dailyActivity.events.forEach((event) => {
-      const { time, description } = event;
-
-      const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
-        const timeCell = row.getElementsByTagName("td")[0].innerText;
-        let currentTime = time;
-        if (currentTime.length === 4) {
-          currentTime = "0" + currentTime;
-        }
-
-        return timeCell === currentTime;
-      });
-
-      if (row) {
-        const activityCell = row.getElementsByTagName("td")[1];
-        const eventRow = `<div class="event schedule-table">${description}</div>`;
-        activityCell.innerHTML = eventRow;
-        activityCell.style.backgroundColor = "#a8c2be";
-      }
-    });
-  }
 }
 
 function Buildchart(current, target) {
@@ -133,27 +100,17 @@ function Buildchart(current, target) {
     plugins: [ChartDataLabels],
   });
 }
-
 function BuildCalendar() {
   const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
   let currentDate = new Date();
   let currentMonth = currentDate.getMonth();
   let currentYear = currentDate.getFullYear();
+  let selectedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`; // Current date in YYYY-MM-DD format
 
   const calendarDates = document.getElementById("calendar-dates");
   const monthYearElement = document.querySelector(".month-year");
@@ -170,7 +127,7 @@ function BuildCalendar() {
     const wh = document.getElementById("weekday-header");
     wh.innerHTML = "";
     calendarDates.innerHTML = "";
-    weekdays.forEach((day) => {
+    weekdays.forEach(day => {
       const weekdayElement = document.createElement("div");
       weekdayElement.textContent = day;
       wh.appendChild(weekdayElement);
@@ -197,9 +154,32 @@ function BuildCalendar() {
         dateCell.classList.add("current-date");
       }
       dateCell.textContent = i;
+      // Format date as YYYY-MM-DD
+      const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+      dateCell.dataset.date = formattedDate;
+      
+      dateCell.addEventListener("click", () => {
+        // Update selected date and highlight
+        if (selectedDate) {
+          const prevSelected = document.querySelector(`.date-cell[data-date="${selectedDate}"]`);
+          if (prevSelected) {
+            prevSelected.classList.remove("selected-date");
+            if (prevSelected.dataset.date === `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`) {
+              prevSelected.classList.add("current-date");
+            }
+          }
+        }
+        selectedDate = dateCell.dataset.date;
+        dateCell.classList.add("selected-date");
+        Show_User_Activity(selectedDate);
+      });
       calendarDates.appendChild(dateCell);
     }
+
+    // Call Show_User_Activity with the current date
+    Show_User_Activity(selectedDate);
   }
+
   function changeMonth(change) {
     currentMonth += change;
     if (currentMonth < 0) {
@@ -212,6 +192,67 @@ function BuildCalendar() {
     PrintTheDaysInMonthCalendar(currentYear, currentMonth);
   }
 }
+async function Show_User_Activity(selectedDate) {
+try {
+  const date = selectedDate;
+  const username = window.sessionStorage.getItem('userName');
+  const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, date })
+  });
+  const data = await response.json();
+
+  const activityInfo = document.getElementById('schedule');
+  activityInfo.innerHTML = ""; 
+
+  if (data.error||data.length === 0) {
+    const noActivity = document.createElement('p');
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'No activity for this day.';
+    activityInfo.appendChild(noActivity);
+  }else {
+      const tbody = document
+      .getElementById("timetable")
+      .getElementsByTagName("tbody")[0];
+  
+    for (let hour = 0; hour < 24; hour++) {
+      const time = (hour < 10 ? "0" : "") + hour + ":00";
+      const row = `<tr><td>${time}</td><td></td></tr>`;
+      tbody.innerHTML += row;
+    }
+
+    data.forEach(activity => {
+      const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
+        const timeCell = row.getElementsByTagName("td")[0].innerText;
+        let currentTime = activity.time;
+        if (currentTime.length === 4) {
+          currentTime = "0" + currentTime;
+        }
+
+        return timeCell === currentTime;
+      });
+
+      if (row) {
+        const activityCell = row.getElementsByTagName("td")[1];
+        const eventRow = `<div class="event schedule-table">${activity.the_activity}</div>`;
+        activityCell.innerHTML = eventRow;
+        activityCell.style.backgroundColor = "#a8c2be";
+      }
+    });
+  }
+} catch (error) {
+  console.error('Error fetching data:', error);
+  const activityInfo = document.getElementById('schedule');
+  activityInfo.innerHTML='';
+  const noActivity = document.createElement('p');
+  noActivity.textContent = `Error fetching activities: ${error.message}`;
+  activityInfo.appendChild(noActivity);
+}
+}
+
 
 async function removePatient() {
   const patient_id = window.sessionStorage.getItem("patientId");
