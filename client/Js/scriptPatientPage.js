@@ -208,7 +208,12 @@ try {
   const activityInfo = document.getElementById('schedule');
   activityInfo.innerHTML = ""; 
 
-  if (data.error||data.length === 0) {
+  if (data.error) {
+    const noActivity = document.createElement('p');
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'data error.';
+    activityInfo.appendChild(noActivity);
+  }else if (data.length === 0) {
     const noActivity = document.createElement('p');
     noActivity.classList.add("no_activity_text");
     noActivity.textContent = 'No activity for this day.';
