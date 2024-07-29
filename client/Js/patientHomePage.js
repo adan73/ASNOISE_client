@@ -246,10 +246,10 @@ async function UpdateDRinformation() {
       document.getElementById('DrName').textContent = doctorName;
     }
     if (doctorImage) {
-      newImage.src = doctorImage;   //or is it like `./images/${data.doctor_photo}` if it is like this i have to update  the session storage in the line 252 in this file 
+      newImage.src =  `./images/${doctorImage}`; 
       imageContainer.innerHTML = '';
       imageContainer.appendChild(newImage);
-      sessionStorage.setItem('patient-doc-img', data.doctor_photo);
+      sessionStorage.setItem('patient-doc-img',`./images/${data.doctor_photo}`);
     }
     else {
       newImage.src = "images/user_first_profile.jpg";
