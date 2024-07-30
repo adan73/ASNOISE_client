@@ -100,3 +100,36 @@ async function printProfilePic() {
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const hmoSelect = document.getElementById('HMO');
+  if (!hmoSelect) {
+    console.error('Select element with id "HMO" not found');
+    return;
+  }
+  const fetchHMOOptions = async () => {
+    try {
+      const response = await fetch('https://asnoise-4.onrender.com/api/hospitals');
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) {
+        hmoSelect.innerHTML = '';
+        data.forEach(item => {
+          const option = document.createElement('option');
+          const hospitalInfo = `${item.name || 'Unknown'}, ${item.street_address || 'N/A'}`;
+          option.value = hospitalInfo;
+          option.textContent = hospitalInfo;
+          hmoSelect.appendChild(option);
+        });
+      } else {
+        console.error('Expected an array of hospitals, but received:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching HMO options:', error.message);
+    }
+  };
+  fetchHMOOptions();
+});
+
