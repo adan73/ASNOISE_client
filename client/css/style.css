@@ -1782,6 +1782,65 @@ font-size: 20px;
     width: 100px;
     margin-right: 85px;
   }
+  .information {
+    max-width: 100%;
+  }
+  .patient-info {
+    margin-left: 10px;
+  }
+  .patient-details img {
+    width: 80px;
+    height: 70px;
+    margin-top: 40px;
+  }
+  #contact-patient  {
+    width: 70px;
+    margin-left: 15px;
+  }
+  .ayaInfo {
+    margin-left: 5px;
+  }
+  .personal-info {
+    margin-top: 10px;
+  }
+  .treatment-info {
+    margin-left: 5px;
+    width: 100%;
+  }
+  .treatment-info h2 {
+    top: 450px;
+    left: 50px;
+  }
+  #editIcon {
+    left: 275px;
+    top: 492px;
+  }
+  .improvement {
+    left: 190px;
+    top: 630px;
+  }
+  .Dailyactivity {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .Dailyactivity h2 {
+    left: 35px;
+    top: 800px;
+  }
+  .patient-calendar-container {
+    width: 220px;
+    padding-top: 5px;
+  }
+  .patient-calendar-container .prev {
+    margin-left: 140px;
+  }
+  .activity-Icons {
+    margin-left: 0px;
+    gap: 0px;
+  }
+  .activity-Icons i {
+    font-size: 30px;
+  }
   .main-wrapper  {
     min-height: 163vh ;
     flex-direction: row;  
