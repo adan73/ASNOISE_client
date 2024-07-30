@@ -1693,7 +1693,7 @@ font-size: 20px;
 @media (max-width: 750px) {
 
   main {
-    min-height: 100vh ;
+    min-height: 163vh ;
     flex-direction: row;  
     width: 80%;
     margin-left: 5%;
@@ -1737,6 +1737,50 @@ font-size: 20px;
   }
   #plus-cyrcle {
     margin-left: 245px;
+  }
+  #form {
+    flex-direction: row; 
+  }
+  #form_left {
+    left: 5px;
+    max-width: 100px;
+  }
+  .mb-3 #email {
+    width: 300px;
+  }
+  #form_title {
+    left: auto;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+  #form_right {
+    left: 0px;
+    top: 800px;
+    margin-left: 10px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+  #pinfo {
+    max-width: 300px;
+  }
+  #optiones-1,#optiones-2 {
+    max-width: 300px;
+    margin-left: 30px;
+  }
+  #optiones-1 h3,#optiones-2 h3 {
+    max-width: 300px;
+  }
+  .file-conainer {
+    max-width: 300px;
+    left: 0px;
+  }
+  .buttons-done-cancel {
+    left: 10px;
+    width: 450px;
+  }
+  .buttons-done-cancel button {
+    width: 100px;
+    margin-right: 85px;
   }
   .main-wrapper  {
     min-height: 163vh ;
