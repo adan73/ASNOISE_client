@@ -103,32 +103,20 @@ async function Show_User_Activity(selectedDate) {
 try {
   const date = selectedDate;
   const username = window.sessionStorage.getItem('userName');
-  const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
-    method: 'POST',
+  const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, date })
+    }
   });
-
   const data = await response.json();
 
   const activityInfo = document.getElementById('activity');
   const ul = document.createElement('ul');
   activityInfo.innerHTML = ""; 
 
-  if (data.error) {
-    const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'No activity for this day.';
-    activityInfo.appendChild(noActivity);
-  } else if (data.length === 0) {
-    const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'No activity for this day.';
-    activityInfo.appendChild(noActivity);
-  } else {
-    data.forEach(activity => {
+  if (data.success) {
+    data.activity.forEach(activity => {
       const li = document.createElement('li');
       const activitytime = document.createElement('div');
       activitytime.textContent = activity.time;
@@ -141,8 +129,13 @@ try {
       ul.appendChild(li);
     });
     activityInfo.appendChild(ul);
+  } else {
+    const noActivity = document.createElement('p');
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'No activity for this day.';
+    activityInfo.appendChild(noActivity);
   }
-} catch (error) {
+  } catch (error) {
   console.error('Error fetching data:', error);
   const activityInfo = document.getElementById('activity');
   const noActivity = document.createElement('p');

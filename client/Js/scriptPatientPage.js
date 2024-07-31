@@ -7,6 +7,7 @@ window.onload = () => {
   chatbtn.addEventListener("click", () => window.location.href = "chatpage.html");
   printProfilePic();
   loadtratmentData();
+  LoadTreatmentList();
 };
 
 async function initializePage() {
@@ -14,10 +15,10 @@ async function initializePage() {
   try {
     let data;
     if (!window.sessionStorage.getItem("patientData")) {
-      const response = await fetch("data/patients_data.json");
+      const response = await fetch("https://asnoise-4.onrender.com/api/patients/Allpatients");
       data = await response.json();
       window.sessionStorage.setItem("patients", JSON.stringify(data.patients));
-      const p = data.find((patient) => patient.id === "234567891");
+      const p = data.find((patient) => patient.id === patientData.patient_id );
       if (!p) {
         console.error("patient not found");
         return;
@@ -172,7 +173,7 @@ function BuildCalendar() {
         }
         selectedDate = dateCell.dataset.date;
         dateCell.classList.add("selected-date");
-        Show_User_Activity(selectedDate);
+      Show_User_Activity(selectedDate);
       });
       calendarDates.appendChild(dateCell);
     }
@@ -196,59 +197,54 @@ function BuildCalendar() {
 async function Show_User_Activity(selectedDate) {
 try {
   const date = selectedDate;
-  const username = window.sessionStorage.getItem('userName');
-  const response = await fetch('https://asnoise-4.onrender.com/api/activity/getDateActivity', {
-    method: 'POST',
+  const username ='111111118';
+  const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, date })
+    }
   });
   const data = await response.json();
 
   const activityInfo = document.getElementById('schedule');
   activityInfo.innerHTML = ""; 
 
-  if (data.error) {
-    const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'data error.';
-    activityInfo.appendChild(noActivity);
-  }else if (data.length === 0) {
+  if (data.success) {
+    const tbody = document
+    .getElementById("timetable")
+    .getElementsByTagName("tbody")[0];
+
+  for (let hour = 0; hour < 24; hour++) {
+    const time = (hour < 10 ? "0" : "") + hour + ":00";
+    const row = `<tr><td>${time}</td><td></td></tr>`;
+    tbody.innerHTML += row;
+  }
+
+  data.activity.forEach(activity => {
+    const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
+      const timeCell = row.getElementsByTagName("td")[0].innerText;
+      let currentTime = activity.time;
+      if (currentTime.length === 4) {
+        currentTime = "0" + currentTime;
+      }
+
+      return timeCell === currentTime;
+    });
+
+    if (row) {
+      const activityCell = row.getElementsByTagName("td")[1];
+      const eventRow = `<div class="event schedule-table">${activity.the_activity}</div>`;
+      activityCell.innerHTML = eventRow;
+      activityCell.style.backgroundColor = "#a8c2be";
+    }
+  });
+    activityInfo.appendChild(ul);
+  }else{
     const noActivity = document.createElement('p');
     noActivity.classList.add("no_activity_text");
     noActivity.textContent = 'No activity for this day.';
     activityInfo.appendChild(noActivity);
-  }else {
-      const tbody = document
-      .getElementById("timetable")
-      .getElementsByTagName("tbody")[0];
-  
-    for (let hour = 0; hour < 24; hour++) {
-      const time = (hour < 10 ? "0" : "") + hour + ":00";
-      const row = `<tr><td>${time}</td><td></td></tr>`;
-      tbody.innerHTML += row;
-    }
-
-    data.forEach(activity => {
-      const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
-        const timeCell = row.getElementsByTagName("td")[0].innerText;
-        let currentTime = activity.time;
-        if (currentTime.length === 4) {
-          currentTime = "0" + currentTime;
-        }
-
-        return timeCell === currentTime;
-      });
-
-      if (row) {
-        const activityCell = row.getElementsByTagName("td")[1];
-        const eventRow = `<div class="event schedule-table">${activity.the_activity}</div>`;
-        activityCell.innerHTML = eventRow;
-        activityCell.style.backgroundColor = "#a8c2be";
-      }
-    });
-  }
+  }  
 } catch (error) {
   console.error('Error fetching data:', error);
   const activityInfo = document.getElementById('schedule');
@@ -352,6 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function hideForm() {
       treatmenAddForm.style.display = 'none';
+     
   }
 
   showFormBtn.onclick = showForm;
@@ -359,6 +356,8 @@ document.addEventListener('DOMContentLoaded', function() {
   saveBtn.addEventListener('click', function() {
     addMethode();
     hideForm();
+    LoadTreatmentList();
+
   });
   
 });
@@ -402,5 +401,38 @@ async function addMethode() {
   noActivity.textContent = `Error fetching activities: ${error.message}`;
   activityInfo.appendChild(noActivity);
   }
-
+  
 }
+
+
+async function  LoadTreatmentList() {
+  const patient_id= window.sessionStorage.getItem('patientId');
+  try{
+  const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    const ul = document.getElementById('treatmentList');
+    ul.innerHTML = '';
+
+    if (data.success) {
+      data.treatments.forEach(treatments => {
+        const li = document.createElement('li');
+        li.textContent = treatments.method;
+        ul.appendChild(li);
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching or processing data:', error);
+    const ul = document.getElementById('treatmentList');
+    ul.innerHTML = '<li>This patient don`t have treatment methods</li>';
+  }
+}
+

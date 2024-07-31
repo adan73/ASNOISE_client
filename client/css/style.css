@@ -755,6 +755,8 @@
     margin-left: 65px;
     width: 597px;
     height: 300px;
+    
+    overflow-y: auto;
   }
   
   .treatment-info,
@@ -776,11 +778,12 @@
     left: 81px;
     font-size: 22px;
   }
-  
   .methods {
     margin-left: 15px;
     margin-top: 35px;
     font-size: 18px;
+    
+    overflow-y: auto;
   }
   
   .methods h3 {
@@ -790,11 +793,18 @@
   
   .methods ul {
     list-style-type: none;
+    padding: 0;
     color: #333333;
   }
   
   .methods ul li {
-    margin-top: 5px;
+    margin-top:5px;
+    width: auto;
+  }
+  
+  .methods ul li.error {
+    color: red;
+    font-weight: bold;
   }
   
   #editIcon {
