@@ -3,10 +3,6 @@ window.onload = () => {
     PrintPatientsList();
     BuildCalendar();
     build_the_progress();
-    print_x();
-    print_patient_age_for_digram();
-
-
 };
 
 async function PrintPatientsList() {
@@ -67,97 +63,88 @@ async function PrintPatientsList() {
   }
   }
 
-
   function build_the_progress() {
-    const yAxisContainer = document.querySelector(".y-axis");
+    const data = [
+      { month: "January", values: { "0-12": 178, "12-25": 30, "25+": 90 } },
+      { month: "February", values: { "0-12": 30, "12-25": 209, "25+": 259 } },
+      { month: "March", values: { "0-12": 209, "12-25": 120, "25+": 90 } }
+    ];
   
-    var x = 0;
-    for (let i = 100; i >= 10; i -= 10) {
-      if (i == 100) {
-        const ytitle = document.createElement("span");
-        ytitle.textContent = "Progress";
-        ytitle.classList.add("y-title");
-        yAxisContainer.appendChild(ytitle);
-      }
-  
-      const yAxisLine = document.createElement("div");
-      yAxisLine.classList.add("y-axis-line");
-  
-      const yAxisNumber = document.createElement("span");
-      yAxisNumber.textContent = i;
-      yAxisNumber.classList.add("y-axis-number");
-  
-      yAxisLine.appendChild(yAxisNumber);
-      yAxisContainer.appendChild(yAxisLine);
-      if (i == 10) {
-        const xtitle = document.createElement("span");
-        xtitle.textContent = "months";
-        xtitle.classList.add("x-title");
-        yAxisContainer.appendChild(xtitle);
-      }
-    }
-  }
-  
-  function print_x() {
-    const monthsContainer = document.querySelector(".months");
-    const resultsContainer = document.querySelector(".results");
-    const color = ["#003D32", "#00665F", "#35978F"];
-    const months = ["January", "February", "March"];
-    const results = {
-      January: [178, 30, 90],
-      February: [30, 209, 259],
-      March: [209, 120, 90],
+    const colors = {
+      "0-12": "#003D32",
+      "12-25": "#00665F",
+      "25+": "#35978F"
     };
   
-    months.forEach((month) => {
-      const monthDiv = document.createElement("div");
-      monthDiv.textContent = month;
-      monthDiv.classList.add("month");
-      monthsContainer.appendChild(monthDiv);
+    const margin = { top: 20, right: 150, bottom: 40, left: 50 };
+    const width = 600 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
   
-      const monthResults = document.createElement("div");
-      monthResults.classList.add("month-results");
+    const svg = d3.select(".diagram")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
   
-      results[month].forEach((result, index) => {
-        const resultDiv = document.createElement("div");
-        resultDiv.classList.add("result");
-        resultDiv.style.height = `${result}px`;
-        resultDiv.style.backgroundColor = color[index % color.length];
-        monthResults.appendChild(resultDiv);
-      });
+    const x0 = d3.scaleBand()
+      .domain(data.map(d => d.month))
+      .range([0, width])
+      .paddingInner(0.1);
   
-      resultsContainer.appendChild(monthResults);
-    });
-  }
+    const x1 = d3.scaleBand()
+      .domain(Object.keys(data[0].values))
+      .range([0, x0.bandwidth()])
+      .padding(0.05);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d3.max(Object.values(d.values)))])
+      .nice()
+      .range([height, 0]);
   
-  function print_patient_age_for_digram() {
-    const Patientage = document.querySelector(".patient-age");
-    const colors = ["#003D32", "#00665F", "#35978F"];
-    const ages = ["0-12", "12-25", "25+"];
+    svg.append("g")
+      .attr("class", "x-axis")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x0));
   
-    const titleDiv = document.createElement("div");
-    titleDiv.textContent = "Patient Age";
-    titleDiv.classList.add("text-age");
-    Patientage.appendChild(titleDiv);
+    svg.append("g")
+      .attr("class", "y-axis")
+      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d}`));
   
-    ages.forEach((age, index) => {
-      const ageContainer = document.createElement("div");
-      ageContainer.classList.add("age-container");
+    svg.selectAll("g.layer")
+      .data(data)
+      .join("g")
+      .attr("class", "layer")
+      .attr("transform", d => `translate(${x0(d.month)},0)`)
+      .selectAll("rect")
+      .data(d => Object.entries(d.values))
+      .join("rect")
+      .attr("x", d => x1(d[0]))
+      .attr("y", d => y(d[1]))
+      .attr("width", x1.bandwidth())
+      .attr("height", d => height - y(d[1]))
+      .attr("fill", d => colors[d[0]]);
   
-      const ageBox = document.createElement("div");
-      ageBox.classList.add("age-box");
-      ageBox.style.backgroundColor = colors[index];
+    const legend = svg.append("g")
+      .attr("transform", `translate(${width + 20}, 0)`);
   
-      const ageText = document.createElement("div");
-      ageText.classList.add("text-age");
-      ageText.textContent = age;
+    legend.selectAll("rect")
+      .data(Object.entries(colors))
+      .join("rect")
+      .attr("x", 0)
+      .attr("y", (d, i) => i * 25)
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("fill", d => d[1]);
   
-      ageContainer.appendChild(ageBox);
-      ageContainer.appendChild(ageText);
-  
-      Patientage.appendChild(ageContainer);
-    });
-  }
+    legend.selectAll("text")
+      .data(Object.entries(colors))
+      .join("text")
+      .attr("x", 30)
+      .attr("y", (d, i) => i * 25 + 15)
+      .text(d => d[0]);
+}
+
   function BuildCalendar() {
     const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const months = [
