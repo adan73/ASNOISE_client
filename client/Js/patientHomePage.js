@@ -4,7 +4,7 @@ window.onload = () => {
   chatIcon.addEventListener("click", () => window.location.href = "chatpage.html");
   BuildCalendar();
   UpdateDRinformation();
-  UpdateTreatmentList();
+  LoadTreatmentList();
   monitorNotifications();
 };
 function BuildCalendar() {
@@ -115,7 +115,12 @@ try {
   const ul = document.createElement('ul');
   activityInfo.innerHTML = ""; 
 
-  if (data.success) {
+  if (!data.success) {
+    const noActivity = document.createElement('p');
+    noActivity.classList.add("no_activity_text");
+    noActivity.textContent = 'No activity for this day.';
+    activityInfo.appendChild(noActivity);
+  } else {
     data.activity.forEach(activity => {
       const li = document.createElement('li');
       const activitytime = document.createElement('div');
@@ -129,13 +134,8 @@ try {
       ul.appendChild(li);
     });
     activityInfo.appendChild(ul);
-  } else {
-    const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'No activity for this day.';
-    activityInfo.appendChild(noActivity);
   }
-  } catch (error) {
+} catch (error) {
   console.error('Error fetching data:', error);
   const activityInfo = document.getElementById('activity');
   const noActivity = document.createElement('p');
@@ -144,32 +144,42 @@ try {
 }
 }
 
-async function UpdateTreatmentList() {
-  try {
-    const response = await fetch('test.json');//dataurl change based on url 
+async function  LoadTreatmentList() {
+  const patient_id= window.sessionStorage.getItem('patientId');
+  try{
+  const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const patientId = window.sessionStorage.getItem('patientId');
+
     const data = await response.json();
-    const patient = data.patients.find(p => p.patient_id === patientId);
     const ul = document.getElementById('treatmentList');
     ul.innerHTML = '';
-    if (patient) {
-      patient.methods.forEach(method => {
+
+    if (data.success) {
+      data.treatments.forEach(treatments => {
         const li = document.createElement('li');
-        li.textContent = method;
+        li.textContent = treatments.method;
         ul.appendChild(li);
       });
-    } else {
+    }else {
       const noMethodsElement = document.createElement('li');
       noMethodsElement.textContent = 'No treatment methods found from you Dr.';
       ul.appendChild(noMethodsElement);
     }
   } catch (error) {
     console.error('Error fetching or processing data:', error);
+    const ul = document.getElementById('treatmentList');
+    ul.innerHTML = '<li>No treatment methods found from you Dr</li>';
   }
 }
+
+    
 
 async function monitorNotifications() {
   while (true) {
@@ -229,26 +239,28 @@ async function UpdateDRinformation() {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    const doctorName = data.doctor;
-    const doctorImage = data.doctor_photo;  
-    document.getElementById('DrName').innerHTML = '';
+    const doctorName = document.getElementById('DrName');
+    doctorName.innerHTML = '';
     const imageContainer = document.getElementById('DRimg');
-    const newImage = document.createElement('img');
-    newImage.alt = 'Dr Image';
-    if (doctorName) {
-      document.getElementById('DrName').textContent = doctorName;
+    imageContainer.innerHTML = '';
+    if (data.doctor){
+      doctorName.textContent = data.doctor;
     }
-    if (doctorImage) {
-      newImage.src =  `./images/${doctorImage}`; 
-      imageContainer.innerHTML = '';
-      imageContainer.appendChild(newImage);
+    
+    if (data.doctor_photo){
+      const imgElement = document.createElement('img');
+      imgElement.src = `./images/${data.doctor_photo}`;
+      imgElement.alt = "Dr Image";
       sessionStorage.setItem('patient-doc-img',`./images/${data.doctor_photo}`);
+      imageContainer.appendChild(imgElement);
+      
     }
-    else {
-      newImage.src = "images/user_first_profile.jpg";
-      imageContainer.innerHTML = '';
-      imageContainer.appendChild(newImage);
-      sessionStorage.setItem('patient-doc-img', "images/user_first_profile.jpg");
+    else{
+      const imgElement = document.createElement('img');
+      imgElement.src = "images/user_first_profile.jpg";
+      imgElement.alt = "Dr Image";
+      sessionStorage.setItem('patient-doc-img',"images/user_first_profile.jpg");
+      imageContainer.appendChild(imgElement);
     }
   }
   catch (error) {

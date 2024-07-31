@@ -291,7 +291,7 @@ async function removePatient() {
 async function printProfilePic() {
   const username = window.sessionStorage.getItem('userName');
   try {
-    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
