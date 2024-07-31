@@ -6,6 +6,7 @@ window.onload = () => {
   const chatbtn = document.getElementById("contact-patient");
   chatbtn.addEventListener("click", () => window.location.href = "chatpage.html");
   printProfilePic();
+  loadtratmentData();
 };
 
 async function initializePage() {
@@ -334,4 +335,72 @@ async function printProfilePic() {
     console.error('Error fetching profile picture:',username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const showFormBtn = document.getElementById('editIcon');
+  const treatmenAddForm = document.getElementById('treatmenAddForm');
+  const cancelBtn = document.getElementById('cancel1');
+  const saveBtn = document.getElementById('save1');
+  
+
+  function showForm() {
+      treatmenAddForm.style.display = 'block';
+   
+  }
+
+  function hideForm() {
+      treatmenAddForm.style.display = 'none';
+  }
+
+  showFormBtn.onclick = showForm;
+  cancelBtn.onclick = hideForm;
+  saveBtn.addEventListener('click', function() {
+    addMethode();
+    hideForm();
+  });
+  
+});
+
+
+async function loadtratmentData() {
+  const formData = JSON.parse(
+    window.sessionStorage.getItem("patientData") ?? "{}"
+  );
+
+  if (Object.keys(formData).length === 0) {
+    window.location.href = "Doctor_homepage.html";
+    return;
+  }
+
+  document.getElementById("name_t").value =[formData.first_name + " "+ formData.last_name]  ?? "";
+  document.getElementById("id_t").value = formData.patient_id ?? "";
+  
+}
+
+async function addMethode() {
+  const patient_id= window.sessionStorage.getItem('patientId');
+  const method = document.getElementById("Methode").value;
+  try{
+    const response = await fetch('https://asnoise-4.onrender.com/api/treatment/addMethod', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ patient_id, method })
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    hideForm();
+  }catch (error) {
+  console.error('Error fetching data:', error);
+  const activityInfo = document.getElementById('activity');
+  const noActivity = document.createElement('p');
+  noActivity.textContent = `Error fetching activities: ${error.message}`;
+  activityInfo.appendChild(noActivity);
+  }
+
 }

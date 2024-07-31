@@ -2042,3 +2042,69 @@ font-size: 20px;
   right: 286px;
   position: relative;
 }
+
+
+.treatmen_add{
+  display: none;
+   position:absolute;
+   padding: 10px;
+   top:20%;
+   left: 35%;
+}
+
+.treatmen_add .white_back {
+  width: 500px;
+  height: 400px;
+  border-radius: 15px;
+  background-color: #e0f2f1;
+  border-color: #ff1919;
+  border: 1px solid rgba(63, 63, 63, 0.3);
+  font-family: Istok web, sans-serif;
+ 
+}
+.name_id{
+  display: flex;
+  float: left;
+  margin-left: 10px;
+}
+.tretment_text{
+
+  color: #004D40;
+  font-size: 28px;
+  margin-bottom: 35px;
+  left:125px;
+  top:20px;
+  position: relative;
+}
+.name_id input{
+  color: #004D40;
+margin-left: 10px;
+margin-right:10px ;
+}
+.name_id label{
+  color: #004D40;
+}
+.patient-edit-form-methode {
+  color: #004D40;
+  margin-left: 10px;
+}
+.patient-edit-form-methode #Methode{
+  width: 480px;
+  height: 160px;
+  justify-items: flex-start;
+  position: relative;
+}
+
+
+.action-buttons-treatment {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: -10px;
+}
+.action-buttons-treatment .patient-edit-form-submit-button {
+ width: 100px;
+}
+.action-buttons-treatment .patient-edit-form-cancel-button  {
+  width: 100px;
+ }
