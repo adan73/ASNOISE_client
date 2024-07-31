@@ -1,14 +1,13 @@
 window.onload = () => {
-    const messageDataUrl = 'test.json'; // URL to JSON file (data)
+     printProfilePic();
     let lastMessageId = 0;
     const currentUser = window.sessionStorage.getItem('UserType'); 
-    const username = window.sessionStorage.getItem('userName');
     const textarea = document.querySelector('.chat-footer textarea');
     textarea.value = '';
     textarea.placeholder = 'Ask me Anything......';
     loadMessages(lastMessageId, currentUser);
     setupSendButton(currentUser);
-    startMessagePolling(messageDataUrl, lastMessageId, currentUser);
+    startMessagePolling( lastMessageId, currentUser);
     const logopic = document.getElementById("chatLogo");
     logopic.addEventListener("click", () => {
         if (currentUser === 'doctor') {
@@ -17,24 +16,39 @@ window.onload = () => {
             window.location.href = "patientHomePage.html"; 
         }
     });
+   
 };
 
 
 async function loadMessages(lastMessageId, currentUser) {
+    let patient_id;
+    if (currentUser ==='doctor') {
+         patient_id =(JSON.parse(window.sessionStorage.getItem("patientData"))).patient_id;
+    }
+    else {
+         patient_id = window.sessionStorage.getItem('patientId');
+    }
+  
     try {
-        const response = await fetch('test.json');//url to data add 
+       
+        const response = await fetch(`https://asnoise-4.onrender.com/api/chat/${patient_id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        });
         const data = await response.json();
         const chatBody = document.querySelector('.chat-body');
         chatBody.innerHTML = '';
-        if (data.messages.length === 0) {
-            const noMessagesElement = document.createElement('p');
-            noMessagesElement.textContent = 'You have no messages yet';
-            chatBody.appendChild(noMessagesElement);
-        } else {
+        if (data.success) {
             data.messages.forEach(message => {
                 appendMessage(chatBody, message, currentUser);
                 lastMessageId = Math.max(lastMessageId, message.id);
             });
+        } else {
+         const noMessagesElement = document.createElement('p');
+            noMessagesElement.textContent = 'You have no messages yet';
+            chatBody.appendChild(noMessagesElement);
         }
         chatBody.scrollTop = chatBody.scrollHeight;
     }
@@ -121,8 +135,8 @@ async function saveMessage(patientId ,text, currentUser)
     const patient_id = patientId;
     const sender = currentUser;
     const chat = text;
-    try {/// add the url in the fetch next line to save in the database
-        const response = await fetch('', {
+    try {
+        const response = await fetch('https://asnoise-4.onrender.com/api/chat/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -166,22 +180,91 @@ async function saveMessage(patientId ,text, currentUser)
     }
 }
 
-function startMessagePolling(messageDataUrl, lastMessageId, currentUser) {
-    setInterval(() => {
-        fetch(messageDataUrl)
-            .then(response => response.json())
-            .then(data => {
-                const chatBody = document.querySelector('.chat-body');
-                const newMessages = data.messages.filter(message => message.id > lastMessageId);
-
-                if (newMessages.length > 0) {
-                    newMessages.forEach(message => {
-                        appendMessage(chatBody, message, currentUser);
-                        lastMessageId = Math.max(lastMessageId, message.id);
-                    });
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }
-            })
-            .catch(error => console.error('Error polling messages:', error));
-    }, 5000);
+async function startMessagePolling(lastMessageId, currentUser) {
+    let patient_id;
+    if (currentUser ==='doctor') {
+         patient_id =(JSON.parse(window.sessionStorage.getItem("patientData"))).patient_id;
+    }
+    else {
+         patient_id = window.sessionStorage.getItem('patientId');
+    }
+    try {
+        const response = await fetch(`https://asnoise-4.onrender.com/api/chat/${patient_id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        });
+        const messageDataUrl = await response.json();
+        setInterval(() => {
+            fetch(messageDataUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const chatBody = document.querySelector('.chat-body');
+                    const newMessages = data.messages.filter(message => message.id > lastMessageId);
+    
+                    if (newMessages.length > 0) {
+                        newMessages.forEach(message => {
+                            appendMessage(chatBody, message, currentUser);
+                            lastMessageId = Math.max(lastMessageId, message.id);
+                        });
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }
+                })
+                .catch(error => console.error('Error polling messages:', error));
+        }, 5000);
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        const chatBody = document.querySelector('.chat-body');
+        const noChat = document.createElement('p');
+        noChat.textContent = 'Error fetching chat history.';
+        chatBody.appendChild(noChat);
+    }
+    
 }
+async function printProfilePic() {
+    const username = window.sessionStorage.getItem('userName');
+    try {
+      const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      const profilePicDiv = document.getElementById('profile_img');
+      if (data.success && data.photo) {
+        const imgElement = document.createElement('img');
+        imgElement.classList.add('profile-pic')
+        imgElement.src = `./images/${data.photo}`;
+        imgElement.alt = "Profile Picture";
+        window.sessionStorage.setItem('doctorPhoto', data.photo);
+        profilePicDiv.innerHTML = '';
+        profilePicDiv.appendChild(imgElement);
+        const userName =  data.first_name;
+        window.sessionStorage.setItem('doctorFirstName', data.first_name);
+        const userNameElement = document.getElementById('user-name');
+        if (userNameElement) {
+         userNameElement.textContent = userName ? userName : 'Guest'; 
+        }
+      } else {
+        const imgElement1 = document.createElement('img');
+        imgElement1.classList.add('profile-pic')
+        imgElement1.src = './images/user_first_profile.jpg';
+        imgElement1.alt = "Profile Picture";
+        profilePicDiv.appendChild(imgElement1);
+        const userNameElement = document.getElementById('user-name');
+         userNameElement.textContent = 'Guest'; 
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:',username);
+      document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
+    }
+  }
+  
