@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     try {
-      const response = await fetch('https://asnoise-4.onrender.com/api/patients/addPatient', {
+      const response = await fetch('https://asnoise-4.onrender.com/api/patients/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function printProfilePic() {
   const username = window.sessionStorage.getItem('userName');
   try {
-    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${encodeURIComponent(username)}`, {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/users/${username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

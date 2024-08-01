@@ -297,7 +297,7 @@ async function removePatient() {
   }
 
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/patients/deletePatient', {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/patients/${patient_id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -415,7 +415,7 @@ async function addMethode() {
   const patient_id = window.sessionStorage.getItem('patientId');
   const method = document.getElementById("Methode").value;
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/treatment/addMethod', {
+    const response = await fetch('https://asnoise-4.onrender.com/api/treatment/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
