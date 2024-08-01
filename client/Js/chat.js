@@ -8,16 +8,16 @@ window.onload = () => {
     loadMessages(lastMessageId, currentUser);
     setupSendButton(currentUser);
     startMessagePolling(lastMessageId, currentUser);
-    const logopic = document.getElementById("chatLogo");
-    logopic.addEventListener("click", () => {
+    const logoPic = document.getElementById("chatLogo");
+    logoPic.addEventListener("click", () => {
         if (currentUser === 'doctor') {
             window.location.href = "Doctor_homepage.html";
         } else {
             window.location.href = "patientHomePage.html";
         }
     });
-    const logo = document.getElementById("logo");
-    logo.addEventListener("click", () => {
+    const logoBtn = document.getElementById("logo");
+    logoBtn.addEventListener("click", () => {
         if (currentUser === 'doctor') {
             window.location.href = "Doctor_homepage.html";
         } else {
