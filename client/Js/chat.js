@@ -17,7 +17,7 @@ window.onload = () => {
         }
     });
     const logo = document.getElementById("logo");
-    logopic.addEventListener("click", () => {
+    logo.addEventListener("click", () => {
         if (currentUser === 'doctor') {
             window.location.href = "Doctor_homepage.html";
         } else {
