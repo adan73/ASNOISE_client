@@ -1,11 +1,12 @@
 let patient = null;
 window.onload = () => {
-  initializePage();
+   printProfilePic();
+   initializePage();
   const removeBtn = document.getElementById("trash-icon");
   removeBtn.onclick = removePatient;
   const chatbtn = document.getElementById("contact-patient");
   chatbtn.addEventListener("click", () => window.location.href = "chatpage.html");
-  printProfilePic();
+ 
   loadtratmentData();
   LoadTreatmentList();
 };
@@ -31,6 +32,40 @@ async function initializePage() {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+}
+async function get_improvement(){
+  const patient_id =window.sessionStorage.getItem("patientId");
+  try{
+    const response = await fetch(`https://asnoise-4.onrender.com/api/improvement/${patient_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.success) {
+      
+  data.improvement.forEach((improvement) => {
+    window.sessionStorage.setItem('patientTarget', improvement.target);
+    window.sessionStorage.setItem('patientCurrent',improvement.current);
+  });
+    }
+    else{
+      window.sessionStorage.setItem('patientTarget', 0);
+      window.sessionStorage.setItem('patientCurrent',0);
+    }
+  }catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('schedule');
+    activityInfo.innerHTML = '';
+    const noActivity = document.createElement('p');
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
+    activityInfo.appendChild(noActivity);
+  }
+
 }
 
 function initializeInfo(p) {
@@ -58,8 +93,10 @@ function initializeInfo(p) {
     li.textContent = method;
     treatmentMethods.appendChild(li);
   });
-  const current = patient.treatment?.improvement?.current ?? 0;
-  const target = patient.treatment?.improvement?.target ?? 0;
+  get_improvement();
+
+  const current = window.sessionStorage.getItem('patientCurrent');
+  const target = window.sessionStorage.getItem('patientTarget');
   Buildchart(current, target);
 }
 
