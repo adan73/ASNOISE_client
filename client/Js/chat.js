@@ -16,6 +16,14 @@ window.onload = () => {
             window.location.href = "patientHomePage.html";
         }
     });
+    const logo = document.getElementById("logo");
+    logopic.addEventListener("click", () => {
+        if (currentUser === 'doctor') {
+            window.location.href = "Doctor_homepage.html";
+        } else {
+            window.location.href = "patientHomePage.html";
+        }
+    });
 
 };
 
