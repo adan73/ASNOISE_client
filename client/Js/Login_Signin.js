@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('https://asnoise-4.onrender.com/api/users/login', {
+                const response = await fetch('https://asnoise-4.onrender.com/api/users/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
