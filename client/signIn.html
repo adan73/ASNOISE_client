@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignIn</title>
-    <link rel="website icon" type="png" href="images/logo_icon_photo.png">
-    <link rel="stylesheet" href="css/style.css">
+    <title>AVNOISE|SignIn</title>
+    <link rel="website icon" href="images/logo_icon_photo.png">
+    <link rel="stylesheet" href="CSS/style.css" />
     <script src="Js/Login_Signin.js" type="text/javascript"></script>
 </head>
 <body class="log_in_sign_in_body">
@@ -16,17 +16,17 @@
             <form id="signin-form">
                 <div class="group1">
                     <div class="input-group">
-                        <label for="first_name">First Name:</label>
+                        <label for="firstname">First Name:</label>
                         <input type="text" id="firstname" name="firstname" required>
                     </div>
                     <div class="input-group">
-                        <label for="last_name">Last Name:</label>
+                        <label for="lastname">Last Name:</label>
                         <input type="text" id="lastname" name="lastname" required>
                     </div>
                 </div>
                 <div class="group1">
                     <div class="input-group">
-                        <label for="Id">ID:</label>
+                        <label for="id">ID:</label>
                         <input type="text" id="id" name="id" required>
                     </div>
                     <div class="input-group">
@@ -42,6 +42,7 @@
                     <div class="input-group">
                         <label for="user_type">User Type:</label>
                         <select id="user_type" name="user_type" required>
+                            <option value="">Please select</option>
                             <option value="doctor">Doctor</option>
                             <option value="patient">Patient</option>
                         </select>
