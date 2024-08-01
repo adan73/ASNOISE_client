@@ -6,6 +6,8 @@ window.onload = () => {
   };
   printProfilePic();
   document.getElementById("save").onclick = () => savePatientInfo();
+  const cancelBtn = document.getElementById("cancel");
+  cancelBtn.addEventListener("click", () => window.location.href = "patientPage.html");
 };
 
 

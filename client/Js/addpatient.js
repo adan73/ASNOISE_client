@@ -1,5 +1,9 @@
 window.onload = () => {
   printProfilePic();
+  const cancelBtn = document.getElementById("cancel-button");
+  cancelBtn.addEventListener("click", () => window.location.href = "Doctor_homepage.html");
+
+
 };
 
 document.addEventListener('DOMContentLoaded', () => {
