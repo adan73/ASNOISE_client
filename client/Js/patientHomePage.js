@@ -61,12 +61,10 @@ function BuildCalendar() {
         dateCell.classList.add("current-date");
       }
       dateCell.textContent = i;
-      // Format date as YYYY-MM-DD
       const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
       dateCell.dataset.date = formattedDate;
-      
+
       dateCell.addEventListener("click", () => {
-        // Update selected date and highlight
         if (selectedDate) {
           const prevSelected = document.querySelector(`.date-cell[data-date="${selectedDate}"]`);
           if (prevSelected) {
@@ -82,8 +80,6 @@ function BuildCalendar() {
       });
       calendarDates.appendChild(dateCell);
     }
-
-    // Call Show_User_Activity with the current date
     Show_User_Activity(selectedDate);
   }
 
@@ -100,59 +96,59 @@ function BuildCalendar() {
   }
 }
 async function Show_User_Activity(selectedDate) {
-try {
-  const date = selectedDate;
-  const username = window.sessionStorage.getItem('userName');
-  const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  const data = await response.json();
-
-  const activityInfo = document.getElementById('activity');
-  const ul = document.createElement('ul');
-  activityInfo.innerHTML = ""; 
-
-  if (!data.success) {
-    const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'No activity for this day.';
-    activityInfo.appendChild(noActivity);
-  } else {
-    data.activity.forEach(activity => {
-      const li = document.createElement('li');
-      const activitytime = document.createElement('div');
-      activitytime.textContent = activity.time;
-      activitytime.classList.add('time_text');
-      const theActivity = document.createElement('div');
-      theActivity.textContent = activity.the_activity;
-      theActivity.classList.add('active_text');
-      li.appendChild(activitytime);
-      li.appendChild(theActivity);
-      ul.appendChild(li);
+  try {
+    const date = selectedDate;
+    const username = window.sessionStorage.getItem('userName');
+    const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
-    activityInfo.appendChild(ul);
+    const data = await response.json();
+
+    const activityInfo = document.getElementById('activity');
+    const ul = document.createElement('ul');
+    activityInfo.innerHTML = "";
+
+    if (!data.success) {
+      const noActivity = document.createElement('p');
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
+      activityInfo.appendChild(noActivity);
+    } else {
+      data.activity.forEach(activity => {
+        const li = document.createElement('li');
+        const activitytime = document.createElement('div');
+        activitytime.textContent = activity.time;
+        activitytime.classList.add('time_text');
+        const theActivity = document.createElement('div');
+        theActivity.textContent = activity.the_activity;
+        theActivity.classList.add('active_text');
+        li.appendChild(activitytime);
+        li.appendChild(theActivity);
+        ul.appendChild(li);
+      });
+      activityInfo.appendChild(ul);
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('activity');
+    const noActivity = document.createElement('p');
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
+    activityInfo.appendChild(noActivity);
   }
-} catch (error) {
-  console.error('Error fetching data:', error);
-  const activityInfo = document.getElementById('activity');
-  const noActivity = document.createElement('p');
-  noActivity.textContent = `Error fetching activities: ${error.message}`;
-  activityInfo.appendChild(noActivity);
-}
 }
 
-async function  LoadTreatmentList() {
-  const patient_id= window.sessionStorage.getItem('patientId');
-  try{
-  const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+async function LoadTreatmentList() {
+  const patient_id = window.sessionStorage.getItem('patientId');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -167,7 +163,7 @@ async function  LoadTreatmentList() {
         li.textContent = treatments.method;
         ul.appendChild(li);
       });
-    }else {
+    } else {
       const noMethodsElement = document.createElement('li');
       noMethodsElement.textContent = 'No treatment methods found from you Dr.';
       ul.appendChild(noMethodsElement);
@@ -179,7 +175,7 @@ async function  LoadTreatmentList() {
   }
 }
 
-    
+
 
 async function monitorNotifications() {
   while (true) {
@@ -204,7 +200,7 @@ async function monitorNotifications() {
   }
 }
 
-/*need to change this function basede on the real login to know if there is a new notification */
+
 async function checkForNewNotifications() {
   return new Promise((resolve) => {
     const notifications = [];
@@ -243,23 +239,23 @@ async function UpdateDRinformation() {
     doctorName.innerHTML = '';
     const imageContainer = document.getElementById('DRimg');
     imageContainer.innerHTML = '';
-    if (data.doctor){
+    if (data.doctor) {
       doctorName.textContent = data.doctor;
     }
-    
-    if (data.doctor_photo){
+
+    if (data.doctor_photo) {
       const imgElement = document.createElement('img');
       imgElement.src = `./images/${data.doctor_photo}`;
       imgElement.alt = "Dr Image";
-      sessionStorage.setItem('patient-doc-img',`./images/${data.doctor_photo}`);
+      sessionStorage.setItem('patient-doc-img', `./images/${data.doctor_photo}`);
       imageContainer.appendChild(imgElement);
-      
+
     }
-    else{
+    else {
       const imgElement = document.createElement('img');
       imgElement.src = "images/user_first_profile.jpg";
       imgElement.alt = "Dr Image";
-      sessionStorage.setItem('patient-doc-img',"images/user_first_profile.jpg");
+      sessionStorage.setItem('patient-doc-img', "images/user_first_profile.jpg");
       imageContainer.appendChild(imgElement);
     }
   }
@@ -291,30 +287,30 @@ async function printProfilePic() {
     window.sessionStorage.setItem('patientId', data.id);
     const profilePicDiv = document.getElementById('profile_img');
     if (data.success && data.photo) {
-      window.sessionStorage.setItem('userPatientImg',`./images/${data.photo}`);
+      window.sessionStorage.setItem('userPatientImg', `./images/${data.photo}`);
       const imgElement = document.createElement('img');
       imgElement.classList.add('profile-pic')
       imgElement.src = `./images/${data.photo}`;
       imgElement.alt = "Profile Picture";
       profilePicDiv.innerHTML = '';
       profilePicDiv.appendChild(imgElement);
-      const userName =  data.first_name;
+      const userName = data.first_name;
       const userNameElement = document.getElementById('user-name');
       if (userNameElement) {
-       userNameElement.textContent = userName ? userName : 'Guest'; 
+        userNameElement.textContent = userName ? userName : 'Guest';
       }
     } else {
       const imgElement1 = document.createElement('img');
       imgElement1.classList.add('profile-pic')
       imgElement1.src = './images/user_first_profile.jpg';
-      window.sessionStorage.setItem('userPatientImg','./images/user_first_profile.jpg');
+      window.sessionStorage.setItem('userPatientImg', './images/user_first_profile.jpg');
       imgElement1.alt = "Profile Picture";
       profilePicDiv.appendChild(imgElement1);
       const userNameElement = document.getElementById('user-name');
-       userNameElement.textContent = 'Guest'; 
+      userNameElement.textContent = 'Guest';
     }
   } catch (error) {
-    console.error('Error fetching profile picture:',username);
+    console.error('Error fetching profile picture:', username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }

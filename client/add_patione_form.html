@@ -1,199 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVNOISE |New Patient</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="Js/addpatient.js" type="text/javascript"></script>
-    <link rel="website icon" type="png" href="images/logo_icon_photo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  </head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AVNOISE |New Patient</title>
+  <link rel="website icon" type="png" href="images/logo_icon_photo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="Js/addpatient.js" type="text/javascript"></script>
+</head>
 <body>
   <header>
-	<a href="Doctor_homepage.html" id="logo"></a>
-      <div class="profile">
-        <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
-        <div class="profile-pic-wrapper">
-          <div id="profile_img"></div>
-          <span class="status-dot"></span>
-        </div>
+    <a href="Doctor_homepage.html" id="logo"></a>
+    <div class="profile">
+      <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
+      <div class="profile-pic-wrapper">
+        <div id="profile_img"></div>
+        <span class="status-dot"></span>
       </div>
-    </header>
+    </div>
+  </header>
   <main>
     <h1 id="form_title">New Patient information</h1>
-
     <section>
       <div class="container mt-5">
         <form id="form">
-        <section id="form_left">
-          <div id="group_form_div">
-            <div class="mb-3">
-              <div class="red_start">*</div>
+          <section id="form_left">
+            <div id="group_form_div">
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="fname" class="form-label">First Name :</label>
                 <input type="text" class="form-control" id="fname" required>
-            </div>
-            <div class="mb-3">
-              <div class="red_start">*</div>
+              </div>
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="lname" class="form-label">Last Name :</label>
                 <input type="text" class="form-control" id="lname" required>
+              </div>
             </div>
-          </div>
-
-          <div id="group_form_div">
-            <div class="mb-3">
-              <div class="red_start">*</div>
+            <div id="group_form_div">
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="id" class="form-label">ID :</label>
                 <input type="tel" class="form-control" id="id" pattern="[0-9]{9}" required>
-            </div>
-            <div class="mb-3">
-              <div class="red_start">*</div>
+              </div>
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="gender" class="form-label">Gender :</label>
                 <select id="gender" class="form-control" name="gender">
                   <option value="male">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
+              </div>
             </div>
-          </div>
-
-
-          <div id="group_form_div">
-            <div class="mb-3">
-              <div class="red_start">*</div>
-              <label for="HMO" class="form-label">HMO :</label>
-              <select class="form-control" id="HMO" required>
-              </select>
-            </div>
-            <div class="mb-3">
-              <div class="red_start">*</div>
+            <div id="group_form_div">
+              <div class="mb-3">
+                <div class="red_start">*</div>
+                <label for="HMO" class="form-label">HMO :</label>
+                <select class="form-control" id="HMO" required>
+                </select>
+              </div>
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="ADHD" class="form-label">ADHD Stage :</label>
                 <input type="text" class="form-control" id="ADHD" required>
+              </div>
             </div>
-          </div>
-
-          <div id="group_form_div">
-            <div class="mb-3">
-              <div class="red_start">*</div>
+            <div id="group_form_div">
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="Age" class="form-label">Age :</label>
                 <input type="number" class="form-control" id="Age" required>
-            </div>
-            <div class="mb-3">
+              </div>
+              <div class="mb-3">
                 <label for="Career" class="form-label">Career :</label>
                 <input type="text" class="form-control" id="Career" required>
+              </div>
             </div>
-          </div>
-
-          <div id="group_form_div">
-            <div class="mb-3">
+            <div id="group_form_div">
+              <div class="mb-3">
                 <label for="Age" class="form-label">Address :</label>
                 <input type="text" class="form-control" id="Address" required>
-            </div>
-            <div class="mb-3">
-              <div class="red_start">*</div>
+              </div>
+              <div class="mb-3">
+                <div class="red_start">*</div>
                 <label for="Phone" class="form-label">Phone Number :</label>
                 <input type="tel" class="form-control" id="Phone" pattern="[0-9]{10}" required>
+              </div>
             </div>
-          </div>
-          
-          <div class="mb-3" id="email_section">
-            <div class="red_start">*</div>
+            <div class="mb-3" id="email_section">
+              <div class="red_start">*</div>
               <label for="email" class="form-label">Email :</label>
               <input type="email" class="form-control" id="email" required>
-          </div>
-          
-        </section>
-
-        <section id="form_right">
-          <div>
-            <input type="checkbox" id="check" required>
-            <label for="check" id="pinfo">Previous information about the patient</label>
-          </div>
-
-   
-          <div id="optiones-1">
-            <h3>How often does the patient have difficulty keeping his/her attention when he/she is doing repetitive work.</h3>
-           <div id="optien-1">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone1" >
-            <label for="very often" id="optient_radio">Very often</label>
-           </div>
-           <div id="optien-2">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone1" >
-            <label for="very often" id="optient_radio">Often</label>
-           </div>
-           <div id="optien-3">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone1" >
-            <label for="very often" id="optient_radio">Rarely</label>
-           </div>
-           <div id="optien-4">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone1" >
-            <label for="very often" id="optient_radio">Sometimes </label>
-           </div>
-           <div id="optien-5-1">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone1" >
-            <label for="very often" id="optient_radio">Never</label>
-           </div>
-          </div>
-
-          <div id="optiones-2">
-            <h3>How often had the patient been distracted by activity or noise around him/her.</h3>
-           <div id="optien-1">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone" >
-            <label for="very often" id="optient_radio">Very often</label>
-           </div>
-           <div id="optien-2">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone" >
-            <label for="very often" id="optient_radio">Often</label>
-           </div>
-           <div id="optien-3">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone" >
-            <label for="very often" id="optient_radio">Rarely</label>
-           </div>
-           <div id="optien-4">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone" >
-            <label for="very often" id="optient_radio">Sometimes </label>
-           </div>
-           <div id="optien-5-2">
-            <input type="radio" id="optient_radio_cyrcle" name="timezone" >
-            <label for="very often" id="optient_radio">Never</label>
-           </div>
-          </div>
-
-          <div class="container mt-5">
-            <div class="file-conainer">
+            </div>
+          </section>
+          <section id="form_right">
+            <div>
+              <input type="checkbox" id="check">
+              <label for="check" id="pinfo">Previous information about the patient</label>
+            </div>
+            <div id="optiones-1">
+              <h3>How often does the patient have difficulty keeping his/her attention when he/she is doing repetitive
+                work.</h3>
+              <div id="optien-1">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone1">
+                <label for="very often" id="optient_radio">Very often</label>
+              </div>
+              <div id="optien-2">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone1">
+                <label for="very often" id="optient_radio">Often</label>
+              </div>
+              <div id="optien-3">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone1">
+                <label for="very often" id="optient_radio">Rarely</label>
+              </div>
+              <div id="optien-4">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone1">
+                <label for="very often" id="optient_radio">Sometimes </label>
+              </div>
+              <div id="optien-5-1">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone1">
+                <label for="very often" id="optient_radio">Never</label>
+              </div>
+            </div>
+            <div id="optiones-2">
+              <h3>How often had the patient been distracted by activity or noise around him/her.</h3>
+              <div id="optien-1">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone">
+                <label for="very often" id="optient_radio">Very often</label>
+              </div>
+              <div id="optien-2">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone">
+                <label for="very often" id="optient_radio">Often</label>
+              </div>
+              <div id="optien-3">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone">
+                <label for="very often" id="optient_radio">Rarely</label>
+              </div>
+              <div id="optien-4">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone">
+                <label for="very often" id="optient_radio">Sometimes </label>
+              </div>
+              <div id="optien-5-2">
+                <input type="radio" id="optient_radio_cyrcle" name="timezone">
+                <label for="very often" id="optient_radio">Never</label>
+              </div>
+            </div>
+            <div class="container mt-5">
+              <div class="file-conainer">
                 <div class="file-header">
-                    <span id="title">Patient Files</span>
-                    <div id="header-2">
-                        <i class="fas fa-file-medical icon"></i>
-                        <i class="fas fa-trash icon ms-2"></i>
-                    </div>
+                  <span id="title">Patient Files</span>
+                  <div id="header-2">
+                    <i class="fas fa-file-medical icon"></i>
+                    <i class="fas fa-trash icon ms-2"></i>
+                  </div>
                 </div>
                 <div class="file-body">
-                    <i class="fas fa-plus icon" style="font-size: 2rem;"></i>
+                  <i class="fas fa-plus icon" style="font-size: 2rem;"></i>
                 </div>
+              </div>
             </div>
-
-
-        </section>
-          
-      </div>
-      <div class="buttons-done-cancel">
-       
-        <button type="submit" class="btn btn-success" id="done">Done</button>
-        <a href="Doctor_homepage.html"> <button type="button" id="cancel-button" class="btn btn-danger">Cancel</button>
-        </a>
-      </div>
-      
+          </section>
+          <div class="buttons-done-cancel">
+            <button type="submit" class="btn btn-success" id="done">Done</button>
+            <a href="Doctor_homepage.html"> <button type="button" id="cancel-button"
+                class="btn btn-danger">Cancel</button>
+            </a>
+          </div>
         </form>
-        
-    </div>
+      </div>
     </section>
   </main>
   <footer id="page2">
-		<i class="fa-solid fa-circle-question fa-xl"></i>
-		<i class="fa-solid fa-gear fa-xl"></i>
-	 </footer>    
+    <i class="fa-solid fa-circle-question fa-xl"></i>
+    <i class="fa-solid fa-gear fa-xl"></i>
+  </footer>
 </body>
 </html>

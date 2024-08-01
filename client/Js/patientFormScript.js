@@ -19,8 +19,8 @@ function loadFormData() {
     return;
   }
 
-  document.getElementById("first_name").value =formData.first_name  ?? "";
-  document.getElementById("last_name").value =formData.last_name  ?? "";
+  document.getElementById("first_name").value = formData.first_name ?? "";
+  document.getElementById("last_name").value = formData.last_name ?? "";
   document.getElementById("age").value = formData.age ?? "";
   document.getElementById("stage").value = formData.adhdStage ?? "";
   document.getElementById("id").value = formData.patient_id ?? "";
@@ -28,9 +28,9 @@ function loadFormData() {
   document.getElementById("phone").value = formData.phone ?? "";
   document.getElementById("address").value = formData.address ?? "";
   document.getElementById("hmo").value = formData.hmo ?? "";
-  window.sessionStorage.setItem('patient_photo',formData.photo,) ;
+  window.sessionStorage.setItem('patient_photo', formData.photo,);
   const previewImage = document.getElementById("preview-image");
-  previewImage.src =  `./images/${formData.photo}` ?? "";
+  previewImage.src = `./images/${formData.photo}` ?? "";
   previewImage.style.display = formData.photo ? "block" : "none";
 }
 async function savePatientInfo() {
@@ -38,14 +38,14 @@ async function savePatientInfo() {
     first_name: document.getElementById("first_name").value,
     last_name: document.getElementById("last_name").value,
     age: document.getElementById("age").value,
-    adhdStage: document.getElementById("stage").value,  
+    adhdStage: document.getElementById("stage").value,
     patient_id: document.getElementById("id").value,
     email: document.getElementById("email").value,
     phone: document.getElementById("phone").value,
     address: document.getElementById("address").value,
     hmo: document.getElementById("hmo").value,
-    photo: window.sessionStorage.getItem('patient_photo') , 
-    doctor:window.sessionStorage.getItem('doctorFirstName'),
+    photo: window.sessionStorage.getItem('patient_photo'),
+    doctor: window.sessionStorage.getItem('doctorFirstName'),
     doctor_photo: window.sessionStorage.getItem('doctorPhoto')
   };
 
@@ -59,7 +59,7 @@ async function savePatientInfo() {
   if (patientIndex !== -1) {
     patients[patientIndex] = formData;
   } else {
-    patients.push(formData); 
+    patients.push(formData);
   }
 
   window.sessionStorage.setItem("patients", JSON.stringify(patients));
@@ -79,7 +79,7 @@ async function savePatientInfo() {
 
     const result = await response.json();
     console.log('Patient updated successfully:', result);
-    window.location.href = "patientPage.html"; 
+    window.location.href = "patientPage.html";
   } catch (error) {
     console.error('Error updating patient:', error);
     alert('Failed to update patient info');
@@ -124,11 +124,11 @@ async function printProfilePic() {
       window.sessionStorage.setItem('doctorPhoto', data.photo);
       profilePicDiv.innerHTML = '';
       profilePicDiv.appendChild(imgElement);
-      const userName =  data.first_name;
+      const userName = data.first_name;
       window.sessionStorage.setItem('doctorFirstName', data.first_name);
       const userNameElement = document.getElementById('user-name');
       if (userNameElement) {
-       userNameElement.textContent = userName ? userName : 'Guest'; 
+        userNameElement.textContent = userName ? userName : 'Guest';
       }
     } else {
       const imgElement1 = document.createElement('img');
@@ -137,10 +137,10 @@ async function printProfilePic() {
       imgElement1.alt = "Profile Picture";
       profilePicDiv.appendChild(imgElement1);
       const userNameElement = document.getElementById('user-name');
-       userNameElement.textContent = 'Guest'; 
+      userNameElement.textContent = 'Guest';
     }
   } catch (error) {
-    console.error('Error fetching profile picture:',username);
+    console.error('Error fetching profile picture:', username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }

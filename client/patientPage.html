@@ -9,40 +9,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="css/style.css">
-    <script src="Js/scriptPatientPage.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="website icon" type="png" href="images/logo_icon_photo.png">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
-   
+    <script src="Js/scriptPatientPage.js"></script>
 </head>
 
 <body>
-	<header>
-		<a href="Doctor_homepage.html" id="logo"></a>
-		<div class="profile">
-			<div class="profile-text">Hi,Orit</div>
-			<div class="profile-pic-wrapper">
+    <header>
+        <a href="Doctor_homepage.html" id="logo"></a>
+        <div class="profile">
+            <div class="profile-text">Hi, <span id="user-name">Loading...</span></div>
+            <div class="profile-pic-wrapper">
                 <div id="profile_img"></div>
                 <span class="status-dot"></span>
             </div>
-		</div>
-	</header>
+        </div>
+    </header>
     <div class="wrapper">
         <main>
             <section class="information">
                 <div class="patient-info">
                     <div class="patient-details">
-                        <img src="" alt="" id="profile-picture">
+                        <img src="images/user_first_profile.jpg" alt="Patient profile picture" id="profile-picture">
                         <div class="ayaInfo">
                             <div class="edit-patient">
                                 <h2 id="name"></h2>
                                 <a href="patientForm.html">
                                     <i class="material-icons">edit</i>
                                 </a>
-                                <i id="trash-icon" class='fas fa-trash-alt' ></i>
+                                <i id="trash-icon" class='fas fa-trash-alt'></i>
                             </div>
                             <p>Age: <span id="age"></span></p>
                             <p>ADHD Stage: <span id="adhd-stage"></span></p>
@@ -72,6 +71,7 @@
                         <span>Improvement</span>
                         <canvas id="chartId" aria-label="chart" height="114.34px" width="114.34px"></canvas>
                     </div>
+                </div>
             </section>
             <section class="Dailyactivity">
                 <h2>Daily Activity</h2>
@@ -86,7 +86,7 @@
                         <div class="calendar-dates" id="calendar-dates"></div>
                     </div>
                 </div>
-                <div id="schedule">    
+                <div id="schedule">
                     <div class="schedule-table-container">
                         <table id="timetable" class="schedule-table">
                             <thead>
@@ -97,8 +97,8 @@
                             </thead>
                             <tbody>
                             </tbody>
-                        </table>       
-                    </div>       
+                        </table>
+                    </div>
                 </div>
                 <div class="activity-Icons">
                     <i class="material-icons">graphic_eq</i>
@@ -115,13 +115,13 @@
                         <h2 class="tretment_text">Add Method Form</h2>
                         <div class="name_id">
                             <label for="name_t" class="name_t">Name</label>
-                            <input type="text" id="name_t" name="name_t" />  
+                            <input type="text" id="name_t" name="name_t" />
                             <label for="id_t" class="l_name">Id</label>
-                            <input type="text" id="id_t" name="id_t"/>
+                            <input type="text" id="id_t" name="id_t" />
                         </div>
                         <div class="patient-edit-form-methode">
                             <label for="Methode">Method</label>
-                            <input type="text" id="Methode" name="Methode"/>
+                            <input type="text" id="Methode" name="Methode" />
                         </div>
                     </form>
                     <div class="action-buttons-treatment">

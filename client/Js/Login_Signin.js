@@ -4,12 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Validate input
             if (!username || !password) {
                 alert('Please enter both username and password.');
                 return;
@@ -50,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signinForm) {
         signinForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent the default form submission
-            
+            event.preventDefault();
+
             const first_name = document.getElementById('firstname').value;
             const last_name = document.getElementById('lastname').value;
             const users_id = document.getElementById('id').value;
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const photo = 'user_first_profile.jpg';
             const user_type = document.getElementById('user_type').value;
 
-            // Validate input
             if (!users_id || !first_name || !last_name || !user_password || !email || !username || !user_type) {
                 alert('Please fill all the requested data.');
                 return;
@@ -85,10 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     window.sessionStorage.setItem('userName', username);
                     window.sessionStorage.setItem('UserType', data.user_type);
-                    if(user_type === 'doctor')
-                    window.location.href = 'Doctor_homepage.html';
-                    else{
-                        window.location.href = 'patientHomePage.html';  
+                    if (user_type === 'doctor')
+                        window.location.href = 'Doctor_homepage.html';
+                    else {
+                        window.location.href = 'patientHomePage.html';
                     }
                 } else {
                     alert(data.error || 'Sign in failed');

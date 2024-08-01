@@ -18,7 +18,7 @@ async function initializePage() {
       const response = await fetch("https://asnoise-4.onrender.com/api/patients/Allpatients");
       data = await response.json();
       window.sessionStorage.setItem("patients", JSON.stringify(data.patients));
-      const p = data.find((patient) => patient.id === patientData.patient_id );
+      const p = data.find((patient) => patient.id === patientData.patient_id);
       if (!p) {
         console.error("patient not found");
         return;
@@ -27,7 +27,6 @@ async function initializePage() {
     } else {
       data = JSON.parse(window.sessionStorage.getItem("patientData"));
     }
-
     initializeInfo(data);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -38,9 +37,9 @@ function initializeInfo(p) {
   patient = p;
 
   window.sessionStorage.setItem("patientData", JSON.stringify(patient));
-  document.getElementById("profile-picture").src =  `./images/${ patient.photo}`;
+  document.getElementById("profile-picture").src = `./images/${patient.photo}`;
   document.getElementById("profile-picture").alt = patient.name;
-  document.getElementById("name").textContent =`${patient.first_name} ${patient.last_name}`; 
+  document.getElementById("name").textContent = `${patient.first_name} ${patient.last_name}`;
   document.getElementById("age").textContent = patient.age;
   document.getElementById("adhd-stage").textContent = patient.adhdStage;
 
@@ -156,12 +155,10 @@ function BuildCalendar() {
         dateCell.classList.add("current-date");
       }
       dateCell.textContent = i;
-      // Format date as YYYY-MM-DD
       const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
       dateCell.dataset.date = formattedDate;
-      
+
       dateCell.addEventListener("click", () => {
-        // Update selected date and highlight
         if (selectedDate) {
           const prevSelected = document.querySelector(`.date-cell[data-date="${selectedDate}"]`);
           if (prevSelected) {
@@ -173,12 +170,10 @@ function BuildCalendar() {
         }
         selectedDate = dateCell.dataset.date;
         dateCell.classList.add("selected-date");
-      Show_User_Activity(selectedDate);
+        Show_User_Activity(selectedDate);
       });
       calendarDates.appendChild(dateCell);
     }
-
-    // Call Show_User_Activity with the current date
     Show_User_Activity(selectedDate);
   }
 
@@ -194,65 +189,66 @@ function BuildCalendar() {
     PrintTheDaysInMonthCalendar(currentYear, currentMonth);
   }
 }
+
 async function Show_User_Activity(selectedDate) {
-try {
-  const date = selectedDate;
-  const username ='111111118';
-  const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  const data = await response.json();
+  try {
+    const date = selectedDate;
+    const username = sessionStorage.getItem('userName');
+    const response = await fetch(`https://asnoise-4.onrender.com/api/activity/${username}/${date}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
 
-  const activityInfo = document.getElementById('schedule');
-  activityInfo.innerHTML = ""; 
+    const activityInfo = document.getElementById('schedule');
+    activityInfo.innerHTML = "";
 
-  if (data.success) {
-    const tbody = document
-    .getElementById("timetable")
-    .getElementsByTagName("tbody")[0];
+    if (data.success) {
+      const tbody = document
+        .getElementById("timetable")
+        .getElementsByTagName("tbody")[0];
 
-  for (let hour = 0; hour < 24; hour++) {
-    const time = (hour < 10 ? "0" : "") + hour + ":00";
-    const row = `<tr><td>${time}</td><td></td></tr>`;
-    tbody.innerHTML += row;
-  }
-
-  data.activity.forEach(activity => {
-    const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
-      const timeCell = row.getElementsByTagName("td")[0].innerText;
-      let currentTime = activity.time;
-      if (currentTime.length === 4) {
-        currentTime = "0" + currentTime;
+      for (let hour = 0; hour < 24; hour++) {
+        const time = (hour < 10 ? "0" : "") + hour + ":00";
+        const row = `<tr><td>${time}</td><td></td></tr>`;
+        tbody.innerHTML += row;
       }
 
-      return timeCell === currentTime;
-    });
+      data.activity.forEach(activity => {
+        const row = Array.from(tbody.getElementsByTagName("tr")).find((row) => {
+          const timeCell = row.getElementsByTagName("td")[0].innerText;
+          let currentTime = activity.time;
+          if (currentTime.length === 4) {
+            currentTime = "0" + currentTime;
+          }
 
-    if (row) {
-      const activityCell = row.getElementsByTagName("td")[1];
-      const eventRow = `<div class="event schedule-table">${activity.the_activity}</div>`;
-      activityCell.innerHTML = eventRow;
-      activityCell.style.backgroundColor = "#a8c2be";
+          return timeCell === currentTime;
+        });
+
+        if (row) {
+          const activityCell = row.getElementsByTagName("td")[1];
+          const eventRow = `<div class="event schedule-table">${activity.the_activity}</div>`;
+          activityCell.innerHTML = eventRow;
+          activityCell.style.backgroundColor = "#a8c2be";
+        }
+      });
+      activityInfo.appendChild(ul);
+    } else {
+      const noActivity = document.createElement('p');
+      noActivity.classList.add("no_activity_text");
+      noActivity.textContent = 'No activity for this day.';
+      activityInfo.appendChild(noActivity);
     }
-  });
-    activityInfo.appendChild(ul);
-  }else{
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('schedule');
+    activityInfo.innerHTML = '';
     const noActivity = document.createElement('p');
-    noActivity.classList.add("no_activity_text");
-    noActivity.textContent = 'No activity for this day.';
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
     activityInfo.appendChild(noActivity);
-  }  
-} catch (error) {
-  console.error('Error fetching data:', error);
-  const activityInfo = document.getElementById('schedule');
-  activityInfo.innerHTML='';
-  const noActivity = document.createElement('p');
-  noActivity.textContent = `Error fetching activities: ${error.message}`;
-  activityInfo.appendChild(noActivity);
-}
+  }
 }
 
 
@@ -260,23 +256,23 @@ async function removePatient() {
   const patient_id = window.sessionStorage.getItem("patientId");
   if (!patient_id) {
     console.error('No patient_id found in sessionStorage');
-    return; // Exit function if no patient_id is found
+    return; 
   }
 
   try {
-    const response = await fetch('https://asnoise-4.onrender.com/api/patients/deletePatient', { 
-      method: 'DELETE', 
+    const response = await fetch('https://asnoise-4.onrender.com/api/patients/deletePatient', {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ patient_id })
     });
 
-    const result = await response.json();  
+    const result = await response.json();
 
     if (response.ok) {
       console.log('Patient deleted successfully:', result.message);
-      window.location.href = "Doctor_homepage.html"; 
+      window.location.href = "Doctor_homepage.html";
     } else {
       console.error('Failed to delete patient:', result.error);
       document.getElementById('profile-img').innerHTML = '<p>Error deleting patient</p>';
@@ -312,11 +308,11 @@ async function printProfilePic() {
       window.sessionStorage.setItem('doctorPhoto', data.photo);
       profilePicDiv.innerHTML = '';
       profilePicDiv.appendChild(imgElement);
-      const userName =  data.first_name;
+      const userName = data.first_name;
       window.sessionStorage.setItem('doctorFirstName', data.first_name);
       const userNameElement = document.getElementById('user-name');
       if (userNameElement) {
-       userNameElement.textContent = userName ? userName : 'Guest'; 
+        userNameElement.textContent = userName ? userName : 'Guest';
       }
     } else {
       const imgElement1 = document.createElement('img');
@@ -325,41 +321,41 @@ async function printProfilePic() {
       imgElement1.alt = "Profile Picture";
       profilePicDiv.appendChild(imgElement1);
       const userNameElement = document.getElementById('user-name');
-       userNameElement.textContent = 'Guest'; 
+      userNameElement.textContent = 'Guest';
     }
   } catch (error) {
-    console.error('Error fetching profile picture:',username);
+    console.error('Error fetching profile picture:', username);
     document.getElementById('profile-img').innerHTML = '<p>Error loading profile picture</p>';
   }
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const showFormBtn = document.getElementById('editIcon');
   const treatmenAddForm = document.getElementById('treatmenAddForm');
   const cancelBtn = document.getElementById('cancel1');
   const saveBtn = document.getElementById('save1');
-  
+
 
   function showForm() {
-      treatmenAddForm.style.display = 'block';
-   
+    treatmenAddForm.style.display = 'block';
+
   }
 
   function hideForm() {
-      treatmenAddForm.style.display = 'none';
-     
+    treatmenAddForm.style.display = 'none';
+
   }
 
   showFormBtn.onclick = showForm;
   cancelBtn.onclick = hideForm;
-  saveBtn.addEventListener('click', function() {
+  saveBtn.addEventListener('click', function () {
     addMethode();
     hideForm();
     LoadTreatmentList();
 
   });
-  
+
 });
 
 
@@ -373,15 +369,15 @@ async function loadtratmentData() {
     return;
   }
 
-  document.getElementById("name_t").value =[formData.first_name + " "+ formData.last_name]  ?? "";
+  document.getElementById("name_t").value = [formData.first_name + " " + formData.last_name] ?? "";
   document.getElementById("id_t").value = formData.patient_id ?? "";
-  
+
 }
 
 async function addMethode() {
-  const patient_id= window.sessionStorage.getItem('patientId');
+  const patient_id = window.sessionStorage.getItem('patientId');
   const method = document.getElementById("Methode").value;
-  try{
+  try {
     const response = await fetch('https://asnoise-4.onrender.com/api/treatment/addMethod', {
       method: 'POST',
       headers: {
@@ -394,26 +390,26 @@ async function addMethode() {
     }
 
     hideForm();
-  }catch (error) {
-  console.error('Error fetching data:', error);
-  const activityInfo = document.getElementById('activity');
-  const noActivity = document.createElement('p');
-  noActivity.textContent = `Error fetching activities: ${error.message}`;
-  activityInfo.appendChild(noActivity);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    const activityInfo = document.getElementById('activity');
+    const noActivity = document.createElement('p');
+    noActivity.textContent = `Error fetching activities: ${error.message}`;
+    activityInfo.appendChild(noActivity);
   }
-  
+
 }
 
 
-async function  LoadTreatmentList() {
-  const patient_id= window.sessionStorage.getItem('patientId');
-  try{
-  const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+async function LoadTreatmentList() {
+  const patient_id = window.sessionStorage.getItem('patientId');
+  try {
+    const response = await fetch(`https://asnoise-4.onrender.com/api/treatment/${patient_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
